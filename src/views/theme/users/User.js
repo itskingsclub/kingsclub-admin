@@ -1,392 +1,137 @@
-import React from 'react'
-import {
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableCaption,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-  CPagination,
-  CPaginationItem,
-} from '@coreui/react'
-import { DocsExample } from 'src/components'
+import React, { useState, useMemo } from 'react'
+import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
+
+const data = [
+  {
+    name: {
+      firstName: 'John',
+
+      lastName: 'Doe',
+    },
+
+    address: '261 Erdman Ford',
+
+    city: 'East Daphne',
+
+    state: 'Kentucky',
+  },
+
+  {
+    name: {
+      firstName: 'Jane',
+
+      lastName: 'Doe',
+    },
+
+    address: '769 Dominic Grove',
+
+    city: 'Columbus',
+
+    state: 'Ohio',
+  },
+
+  {
+    name: {
+      firstName: 'Joe',
+
+      lastName: 'Doe',
+    },
+
+    address: '566 Brakus Inlet',
+
+    city: 'South Linda',
+
+    state: 'West Virginia',
+  },
+
+  {
+    name: {
+      firstName: 'Kevin',
+
+      lastName: 'Vandy',
+    },
+
+    address: '722 Emie Stream',
+
+    city: 'Lincoln',
+
+    state: 'Nebraska',
+  },
+
+  {
+    name: {
+      firstName: 'Joshua',
+
+      lastName: 'Rolluffs',
+    },
+
+    address: '32188 Larkin Turnpike',
+
+    city: 'Charleston',
+
+    state: 'South Carolina',
+  },
+]
 
 const User = () => {
+  //should be memoized or stable
+
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: 'name.firstName', //access nested data with dot notation
+
+        header: 'First Name',
+
+        size: 150,
+      },
+
+      {
+        accessorKey: 'name.lastName',
+
+        header: 'Last Name',
+
+        size: 150,
+      },
+
+      {
+        accessorKey: 'address', //normal accessorKey
+
+        header: 'Address',
+
+        size: 200,
+      },
+
+      {
+        accessorKey: 'city',
+
+        header: 'City',
+
+        size: 150,
+      },
+
+      {
+        accessorKey: 'state',
+
+        header: 'State',
+
+        size: 150,
+      },
+    ],
+
+    [],
+  )
+
+  const table = useMaterialReactTable({
+    columns,
+
+    data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+  })
+
   return (
-    <CRow>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Table</strong> <small>Basic example</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-medium-emphasis small">
-              Using the most basic table CoreUI, here&#39;s how <code>&lt;CTable&gt;</code>-based
-              tables look in CoreUI.
-            </p>
-            <CTable responsive striped>
-              <CTableHead>
-                <CTableRow>
-                  <CTableHeaderCell scope="col">#</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Class</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                </CTableRow>
-              </CTableHead>
-              <CTableBody>
-                <CTableRow>
-                  <CTableHeaderCell scope="row">1</CTableHeaderCell>
-                  <CTableDataCell>Mark</CTableDataCell>
-                  <CTableDataCell>Otto</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableHeaderCell scope="row">2</CTableHeaderCell>
-                  <CTableDataCell>Mark</CTableDataCell>
-                  <CTableDataCell>Otto</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>Mukesh Jat DHayal prettire</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableDataCell>Mark</CTableDataCell>
-                  <CTableDataCell>Otto</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableDataCell>Mark</CTableDataCell>
-                  <CTableDataCell>Otto</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableDataCell>Mark</CTableDataCell>
-                  <CTableDataCell>Otto</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableDataCell>Mark</CTableDataCell>
-                  <CTableDataCell>Otto</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableDataCell>Mark</CTableDataCell>
-                  <CTableDataCell>Otto</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableDataCell>Mark</CTableDataCell>
-                  <CTableDataCell>Otto</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableDataCell>Mark</CTableDataCell>
-                  <CTableDataCell>Otto</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableDataCell>Mark</CTableDataCell>
-                  <CTableDataCell>Otto</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableDataCell>Mark</CTableDataCell>
-                  <CTableDataCell>Otto</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableDataCell>Mark</CTableDataCell>
-                  <CTableDataCell>Otto</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableDataCell>Mark</CTableDataCell>
-                  <CTableDataCell>Otto</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableDataCell>Mark</CTableDataCell>
-                  <CTableDataCell>Otto</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableDataCell>Mark</CTableDataCell>
-                  <CTableDataCell>Otto</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                </CTableRow>
-              </CTableBody>
-            </CTable>
-            <CPagination aria-label="Page navigation example">
-              <CPaginationItem aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </CPaginationItem>
-              <CPaginationItem>1</CPaginationItem>
-              <CPaginationItem>2</CPaginationItem>
-              <CPaginationItem>3</CPaginationItem>
-              <CPaginationItem aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </CPaginationItem>
-            </CPagination>
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow>
+    <>
+      <MaterialReactTable table={table} />
+    </>
   )
 }
 
