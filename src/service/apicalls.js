@@ -37,6 +37,15 @@ export async function getuser(id) {
   }
 }
 
+export async function getAllUsers() {
+  try {
+    const response = await APIKit.get(`/user/all`)
+    return response.data
+  } catch (error) {
+    return console.log(error)
+  }
+}
+
 export async function updateUser(payload) {
   try {
     const response = await APIKit.put(`/user/update`, payload, {
