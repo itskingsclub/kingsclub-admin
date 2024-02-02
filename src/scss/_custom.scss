@@ -1,1 +1,15 @@
 // Here you can add other styles
+.css-uhr8s1-MuiTableContainer-root {
+  max-height: clamp(350px, calc(100vh - 283px), 9999px) !important;
+}
+.btn-primary
+{
+  --cui-btn-bg: #3c4b64da !important;
+  --cui-btn-border-color: #3c4b64da !important;
+}
+.btn.btn-primary:hover,
+.btn.btn-primary.active
+{
+  --cui-btn-bg: #3c4b64 !important;
+  --cui-btn-border-color: #3c4b64 !important;
+}

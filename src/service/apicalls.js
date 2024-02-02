@@ -1,3 +1,4 @@
+import baseaddress from './baseAddress'
 import APIKit from './baseApi'
 
 export async function registerApi(payload) {
@@ -37,9 +38,10 @@ export async function getuser(id) {
   }
 }
 
-export async function getAllUsers() {
+export async function getAllUsers(payload) {
   try {
-    const response = await APIKit.get(`/user/all`)
+    const queryString = new URLSearchParams(payload).toString()
+    const response = await APIKit.get(`/user/?${queryString}`)
     return response.data
   } catch (error) {
     return console.log(error)
@@ -69,6 +71,7 @@ export async function createChallange(payload) {
 }
 
 export async function myChallange(payload) {
+  console.log(payload)
   try {
     const response = await APIKit.post(`/challenge/my-challenges`, payload)
     return response.data

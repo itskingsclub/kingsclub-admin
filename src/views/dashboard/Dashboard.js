@@ -57,7 +57,6 @@ import { UserContext } from 'src/userDetail/Userdetail'
 
 const Dashboard = () => {
   const { userDetail } = useContext(UserContext)
-  console.log('userDetail', userDetail)
   const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
 
   const progressExample = [
