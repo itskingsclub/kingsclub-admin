@@ -2,9 +2,9 @@ import React from 'react'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Users = React.lazy(() => import('./views/tables/users/Users'))
-const Payments = React.lazy(() => import('./views/tables/payments/Payments'))
+const Challenges = React.lazy(() => import('./views/tables/challenges/Challenges'))
 const User = React.lazy(() => import('./views/tables/user/User'))
-const Payment = React.lazy(() => import('./views/tables/payment/Payment'))
+const Challenge = React.lazy(() => import('./views/tables/challenge/Challenge'))
 const Backstatement = React.lazy(() => import('./views/tables/user/Backstatement'))
 const Bethistory = React.lazy(() => import('./views/tables/user/Bethistory'))
 
@@ -32,9 +32,9 @@ const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/users', name: 'Users', element: Users },
-  { path: '/payments', name: 'Payments', element: Payments },
+  { path: '/challenges', name: 'Challenges', element: Challenges },
   { path: '/user/:id/profile', name: 'User', element: User },
-  { path: '/payment/:id', name: 'Payment', element: Payment },
+  { path: '/challenge/:id', name: 'Challenge', element: Challenge },
   { path: '/user/:id/bankstatement', name: 'Backstatement', element: Backstatement },
   { path: '/user/:id/bethistory', name: 'Bethistory', element: Bethistory },
   { path: '/charts', name: 'Charts', element: Charts },

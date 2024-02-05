@@ -114,7 +114,7 @@ const Payments = () => {
               <button
                 type="button"
                 className="btn btn btn-primary"
-                onClick={() => navigate(`/payment/${row?.original?.id}`)}
+                onClick={() => navigate(`/challenge/${row?.original?.id}`)}
               >
                 Status
               </button>

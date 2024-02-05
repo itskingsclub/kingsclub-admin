@@ -40,8 +40,8 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Payments',
-    to: '/payments',
+    name: 'Challenges',
+    to: '/challenges',
     icon: <CIcon icon={cibAngular} customClassName="nav-icon" />,
   },
   {
