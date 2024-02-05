@@ -2,7 +2,6 @@ import React, { useState, useMemo, useEffect } from 'react'
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import { getAllUsers } from 'src/service/apicalls'
 import { CAvatar } from '@coreui/react'
-import PropTypes from 'prop-types'
 import baseAddress from 'src/service/baseAddress'
 import { useNavigate } from 'react-router-dom'
 const data = [
@@ -185,15 +184,6 @@ const Users = () => {
       }),
     [userTable],
   )
-  Users.propTypes = {
-    row: PropTypes.shape({
-      original: PropTypes.shape({
-        profile: PropTypes.string,
-        name: PropTypes.string,
-        id: PropTypes.string,
-      }),
-    }),
-  }
 
   return (
     <>

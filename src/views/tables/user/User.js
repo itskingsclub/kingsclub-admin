@@ -1,23 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react'
-import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getuser } from 'src/service/apicalls'
-import PropTypes from 'prop-types'
 import baseaddress from 'src/service/baseAddress'
 
-const data = [
-  {
-    id: '2',
-    profile: '2',
-    name: 'mukesh jat',
-    mobile: 1234567890,
-    email: 'muukesh@gmail.com',
-    game_coin: 12312,
-    address: '261 Erdman Ford',
-    city: 'East Daphne',
-    state: 'Kentucky',
-  },
-]
 const User = () => {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -31,121 +16,6 @@ const User = () => {
   useEffect(() => {
     fechData()
   }, [])
-
-  const userTable = useMemo(
-    () => [
-      {
-        accessorKey: 'id',
-
-        header: 'Id',
-
-        size: 150,
-      },
-      {
-        accessorKey: 'profile',
-
-        header: 'Profile',
-
-        size: 150,
-      },
-
-      {
-        accessorKey: 'name',
-
-        header: 'Name',
-
-        size: 150,
-      },
-
-      {
-        accessorKey: 'mobile', //normal accessorKey
-
-        header: 'Mobile',
-
-        size: 200,
-      },
-      {
-        accessorKey: 'email', //normal accessorKey
-
-        header: 'Email',
-
-        size: 200,
-      },
-
-      {
-        accessorKey: 'game_coin',
-
-        header: 'Game coin',
-
-        size: 150,
-      },
-      {
-        accessorKey: 'action',
-
-        header: 'Action',
-
-        size: 150,
-      },
-    ],
-
-    [],
-  )
-  const columns = useMemo(
-    () =>
-      userTable.map((item) => {
-        if (item.header === 'Profile') {
-          return {
-            ...item,
-            Cell: ({ row }) => (
-              <>
-                {row?.original?.profile !== null ? (
-                  <img
-                    src={`${baseaddress}/upload/${row?.original?.profile}`}
-                    alt="Profile"
-                    style={{
-                      width: '50px',
-                      height: '50px',
-                      borderRadius: '50%',
-                      objectFit: 'cover',
-                      objectPosition: 'top',
-                    }}
-                  />
-                ) : (
-                  <div className="avatar avatar-lg bg-secondary">
-                    {(row?.original?.name).split('')[0].toUpperCase()}
-                  </div>
-                )}
-              </>
-            ),
-          }
-        }
-        if (item.header === 'Action') {
-          return {
-            ...item,
-            Cell: () => (
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => console.log('click')}
-              >
-                Profile
-              </button>
-            ),
-          }
-        }
-        return item
-      }),
-    [userTable],
-  )
-  User.propTypes = {
-    row: PropTypes.shape({
-      original: PropTypes.shape({
-        profile: PropTypes.string,
-        name: PropTypes.string,
-        id: PropTypes.string,
-      }),
-    }),
-  }
 
   return (
     <>
@@ -168,12 +38,69 @@ const User = () => {
           Account Statement
         </button>
       </div>
-      <MaterialReactTable
-        columns={columns}
-        data={[user]}
-        enableTopToolbar={false}
-        enableBottomToolbar={false}
-      />
+      <div className="user-info-container mt-4 mb-4">
+        <div className="user-details">
+          <div className="user-heading">User Info</div>
+          <div className="user-info">
+            <div className="user-info-left">
+              <div className="info-item">
+                <span className="info-label">User ID:</span>
+                <span className="info-value">{user.id}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">User Name:</span>
+                <span className="info-value">{user.name}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Profile:</span>
+                <span className="info-value">
+                  {user?.profile !== null ? (
+                    <img
+                      src={`${baseaddress}/upload/${user?.profile}`}
+                      alt="Profile"
+                      style={{
+                        width: '50px',
+                        height: '50px',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        objectPosition: 'top',
+                      }}
+                    />
+                  ) : (
+                    <div className="avatar avatar-lg bg-secondary">
+                      {(user?.name).split('')[0].toUpperCase()}
+                    </div>
+                  )}
+                </span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">User Mobile:</span>
+                <span className="info-value">{user.mobile}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">User Game Coin:</span>
+                <span className="info-value">{user.game_coin}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">User Refer Coin:</span>
+                <span className="info-value">{user.refer_coin}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">User Win Coin:</span>
+                <span className="info-value">{user.win_coin}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">User Invite Code:</span>
+                <span className="info-value">{user.invite_code}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">User Address:</span>
+                <span className="info-value">{user.address}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   )
 }

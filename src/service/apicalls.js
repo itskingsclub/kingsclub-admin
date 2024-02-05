@@ -88,9 +88,10 @@ export async function challange(id) {
   }
 }
 
-export async function getChallange() {
+export async function getChallange(payload) {
   try {
-    const response = await APIKit.get(`/challenge`)
+    const queryString = new URLSearchParams(payload).toString()
+    const response = await APIKit.get(`/challenge/?${queryString}`)
     return response.data
   } catch (error) {
     return error

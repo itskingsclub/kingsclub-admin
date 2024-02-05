@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useParams, navigate, useNavigate } from 'react-router-dom'
 import { myChallange } from 'src/service/apicalls'
-import PropTypes from 'prop-types'
 import baseAddress from 'src/service/baseAddress'
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 
@@ -70,26 +69,13 @@ const Bethistory = () => {
 
     [],
   )
-  // const formattedData = useMemo(() => {
-  //   return bat.map((bat) => ({
-  //     id: bat.id,
-  //     amount: bat.amount,
-  //     // name: bat.name,
-  //     // mobile: bat.mobile,
-  //     // email: bat.email,
-  //     // game_coin: bat.game_coin,
-  //     // address: bat.address,
-  //     // city: bat.city,
-  //     // state: bat.state,
-  //   }))
-  // }, [bat])
   const columns = useMemo(
     () =>
       batTable.map((item) => {
         if (item.header === 'creatorUser') {
           return {
             ...item,
-            Cell: ({ row }) => console.log(row?.original?.creatorUser?.mobile),
+            Cell: ({ row }) => <span>{row?.original?.creatorUser?.mobile}</span>,
           }
         }
         if (item.header === 'action') {
@@ -110,7 +96,15 @@ const Bethistory = () => {
       }),
     [],
   )
-
+  // bat.propTypes = {
+  //   row: PropTypes.shape({
+  //     original: PropTypes.shape({
+  //       creatorUser: PropTypes.shape({
+  //         mobile: PropTypes.string,
+  //       }),
+  //     }),
+  //   }),
+  // }
   return (
     <>
       <div className="d-flex gap-3 mb-4">
