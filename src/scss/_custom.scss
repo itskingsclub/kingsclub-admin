@@ -1,1 +1,73 @@
 // Here you can add other styles
+.css-uhr8s1-MuiTableContainer-root {
+  max-height: clamp(350px, calc(100vh - 283px), 9999px) !important;
+}
+.btn-primary {
+  --cui-btn-bg: #3c4b64da !important;
+  --cui-btn-border-color: #3c4b64da !important;
+}
+.btn.btn-primary:hover,
+.btn.btn-primary.active {
+  --cui-btn-bg: #3c4b64 !important;
+  --cui-btn-border-color: #3c4b64 !important;
+}
+.user-info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.user-details {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.user-heading {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #fff;
+  padding: 10px;
+  background: rgb(60, 75, 100);
+  margin-bottom: 10;
+}
+
+.user-info {
+  display: flex;
+  background-color: #fff;
+}
+
+.user-info-left,
+.user-info-right {
+  flex: 1;
+}
+
+.info-item {
+  display: flex;
+  border-bottom: 1px solid rgba(224, 224, 224, 1);
+}
+
+.info-label {
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  letter-spacing: 0.01071em;
+  text-align: left;
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 700;
+  padding: 15px;
+  width: 20%;
+  border-right: 1px solid rgba(224, 224, 224, 1);
+}
+
+.info-value {
+  color: #333;
+  padding: 15px;
+  width: 80%;
+}
+
+.user-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}

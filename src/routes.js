@@ -1,7 +1,12 @@
 import React from 'react'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
-const Users = React.lazy(() => import('./views/theme/users/User'))
+const Users = React.lazy(() => import('./views/tables/users/Users'))
+const Challenges = React.lazy(() => import('./views/tables/challenges/Challenges'))
+const User = React.lazy(() => import('./views/tables/user/User'))
+const Challenge = React.lazy(() => import('./views/tables/challenge/Challenge'))
+const Backstatement = React.lazy(() => import('./views/tables/user/Backstatement'))
+const Bethistory = React.lazy(() => import('./views/tables/user/Bethistory'))
 
 //Forms
 const ChecksRadios = React.lazy(() => import('./views/forms/checks-radios/ChecksRadios'))
@@ -27,6 +32,11 @@ const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/users', name: 'Users', element: Users },
+  { path: '/challenges', name: 'Challenges', element: Challenges },
+  { path: '/user/:id/profile', name: 'User', element: User },
+  { path: '/challenge/:id', name: 'Challenge', element: Challenge },
+  { path: '/user/:id/bankstatement', name: 'Backstatement', element: Backstatement },
+  { path: '/user/:id/bethistory', name: 'Bethistory', element: Bethistory },
   { path: '/charts', name: 'Charts', element: Charts },
   { path: '/forms', name: 'Forms', element: FormControl, exact: true },
   { path: '/forms/form-control', name: 'Form Control', element: FormControl },

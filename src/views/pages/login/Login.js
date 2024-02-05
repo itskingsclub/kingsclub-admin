@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -62,8 +61,8 @@ const Login = () => {
         console.log(res)
         if (res.success === true) {
           console.log(user.mobileNumber, res.data.pin)
-          // Use history.push to navigate to "/otp" instead of Link component
-          navigate.push('/otp')
+          localStorage.setItem('mobileNumber', user.mobileNumber)
+          navigate('/otp')
         } else {
           console.log('false', res.message)
           setUser({
@@ -76,10 +75,6 @@ const Login = () => {
       .catch((error) => {
         console.error('API call error:', error)
       })
-  }
-
-  const handleInputSubmit = () => {
-    submitUser()
   }
 
   return (
@@ -111,7 +106,7 @@ const Login = () => {
                           color="primary"
                           className="px-4"
                           disabled={user.errorMessage !== ''}
-                          onClick={handleInputSubmit}
+                          onClick={submitUser}
                         >
                           Send Otp
                         </CButton>

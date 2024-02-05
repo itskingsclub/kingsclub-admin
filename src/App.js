@@ -1,6 +1,7 @@
-import React, { Component, Suspense } from 'react'
-import { HashRouter, Route, Routes } from 'react-router-dom'
+import React, { Suspense, useContext } from 'react'
+import { HashRouter, Route, Routes, Navigate } from 'react-router-dom'
 import './scss/style.scss'
+import { UserContext } from './userDetail/Userdetail'
 
 const loading = (
   <div className="pt-3 text-center">
@@ -18,29 +19,28 @@ const Otp = React.lazy(() => import('./views/pages/otp/Otp'))
 const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
-class App extends Component {
-  render() {
-    const user = false
-    return (
-      <HashRouter>
-        <Suspense fallback={loading}>
-          <Routes>
-            <Route
-              exact
-              path="/"
-              name="Login Page"
-              element={user ? <DefaultLayout /> : <Login />}
-            />
-            <Route exact path="/register" name="Register Page" element={<Register />} />
-            <Route exact path="/otp" name="Otp Page" element={<Otp />} />
-            <Route exact path="/404" name="Page 404" element={<Page404 />} />
-            <Route exact path="/500" name="Page 500" element={<Page500 />} />
-            <Route path="/*" name="Home" element={user ? <DefaultLayout /> : <Login />} />
-          </Routes>
-        </Suspense>
-      </HashRouter>
-    )
-  }
+const AppRoutes = () => {
+  const { userDetail } = useContext(UserContext)
+  return (
+    <Routes>
+      <Route exact path="/" element={userDetail.id ? <DefaultLayout /> : <Login />} />
+      <Route exact path="/register" element={<Register />} />
+      <Route exact path="/otp" element={userDetail.id ? <Navigate to="/" /> : <Otp />} />
+      <Route exact path="/404" element={<Page404 />} />
+      <Route exact path="/500" element={<Page500 />} />
+      <Route path="/*" element={userDetail.id ? <DefaultLayout /> : <Navigate to="/" />} />
+    </Routes>
+  )
+}
+
+const App = () => {
+  return (
+    <HashRouter>
+      <Suspense fallback={loading}>
+        <AppRoutes />
+      </Suspense>
+    </HashRouter>
+  )
 }
 
 export default App
