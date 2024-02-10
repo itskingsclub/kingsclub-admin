@@ -21,6 +21,7 @@ const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
 const AppRoutes = () => {
   const { userDetail } = useContext(UserContext)
+  console.log(userDetail)
   return (
     <Routes>
       <Route exact path="/" element={userDetail.id ? <DefaultLayout /> : <Login />} />

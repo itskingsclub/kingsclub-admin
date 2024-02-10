@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 export const UserContext = createContext({
   userDetail: {},
-  setUserDetail: (userDetail) => {},
+  setUserDetail: (userDetail) => { },
 })
 
 export const UserProvider = ({ children }) => {
@@ -20,7 +20,7 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     if (userDetails?.id) {
-      getuser(1)
+      getuser(userDetails?.id)
         .then((res) => {
           setUserDetail(res.data)
         })

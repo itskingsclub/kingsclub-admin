@@ -8,6 +8,8 @@ import { CBreadcrumb, CBreadcrumbItem } from '@coreui/react'
 const AppBreadcrumb = () => {
   const currentLocation = useLocation().pathname
 
+  console.log('currentLocation', currentLocation)
+
   const getRouteName = (pathname, routes) => {
     const currentRoute = routes.find((route) => route.path === pathname)
     return currentRoute ? currentRoute.name : false
@@ -30,6 +32,7 @@ const AppBreadcrumb = () => {
   }
 
   const breadcrumbs = getBreadcrumbs(currentLocation)
+  console.log("breadcrumbs", breadcrumbs)
 
   return (
     <CBreadcrumb className="m-0 ms-2">

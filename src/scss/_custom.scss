@@ -3,13 +3,13 @@
   max-height: clamp(350px, calc(100vh - 283px), 9999px) !important;
 }
 .btn-primary {
-  --cui-btn-bg: #3c4b64da !important;
-  --cui-btn-border-color: #3c4b64da !important;
+  background-color: #3c4b64da !important;
+  border-color: #3c4b64da !important;
 }
 .btn.btn-primary:hover,
 .btn.btn-primary.active {
-  --cui-btn-bg: #3c4b64 !important;
-  --cui-btn-border-color: #3c4b64 !important;
+  background-color: #3c4b64 !important;
+  border-color: #3c4b64 !important;
 }
 .user-info-container {
   display: flex;
@@ -56,7 +56,7 @@
   color: rgba(0, 0, 0, 0.87);
   font-weight: 700;
   padding: 15px;
-  width: 20%;
+  min-width: 20%;
   border-right: 1px solid rgba(224, 224, 224, 1);
 }
 

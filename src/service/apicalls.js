@@ -71,9 +71,9 @@ export async function createChallange(payload) {
 }
 
 export async function myChallange(payload) {
-  console.log(payload)
   try {
-    const response = await APIKit.post(`/challenge/my-challenges`, payload)
+    const queryString = new URLSearchParams(payload).toString();
+    const response = await APIKit.post(`/challenge/my-challenges/?${queryString}`);
     return response.data
   } catch (error) {
     return console.log(error)
@@ -121,10 +121,21 @@ export async function updateResult(payload) {
   }
 }
 
-export async function myPayment(payload) {
-  console.log('payload', payload)
+export async function getPayments(payload) {
   try {
-    const response = await APIKit.post(`/payment/my-payments`, payload)
+    const queryString = new URLSearchParams(payload).toString()
+    const response = await APIKit.get(`/payment/?${queryString}`)
+    return response.data
+  } catch (error) {
+    return error
+  }
+}
+
+export async function myPayment(payload) {
+  try {
+    const queryString = new URLSearchParams(payload).toString()
+    console.log("payload", queryString)
+    const response = await APIKit.post(`/payment/my-payments/?${queryString}`)
     return response.data
   } catch (error) {
     return console.log(error, payload)
@@ -146,5 +157,14 @@ export async function withdrawal(payload) {
     return response.data
   } catch (error) {
     return error
+  }
+}
+
+export async function getPaymentById(id) {
+  try {
+    const response = await APIKit.get(`/payment/${id}`)
+    return response.data
+  } catch (error) {
+    return console.log(error)
   }
 }

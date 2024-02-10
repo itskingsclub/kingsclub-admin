@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import { getAllUsers, getChallange } from 'src/service/apicalls'
-import { CAvatar } from '@coreui/react'
+import { CBreadcrumbItem, CHeaderDivider, CContainer, CBreadcrumb, CHeader } from '@coreui/react'
 import baseAddress from 'src/service/baseAddress'
 import { useNavigate } from 'react-router-dom'
 
@@ -12,7 +12,7 @@ const Payments = () => {
   const [rowCount, setRowCount] = useState(10)
   const [columnFilters, setColumnFilters] = useState([])
   const [globalFilter, setGlobalFilter] = useState('')
-  const [sorting, setSorting] = useState([{ desc: false, id: 'challenge_status' }])
+  const [sorting, setSorting] = useState([{ desc: false, id: 'room_code' }])
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
@@ -21,19 +21,19 @@ const Payments = () => {
     const data = {
       offset: pagination.pageIndex * pagination.pageSize,
       limit: pagination?.pageSize,
-      sort: 'id',
-      order: sorting[0].desc ? 'ASC' : 'DESC',
+      sort: sorting.length > 0 ? sorting[0]?.id : "id",
+      order: sorting.length > 0 ? sorting[0].desc ? 'ASC' : 'DESC' : 'ASC',
     }
+    console.log("data", data)
     getChallange(data).then((res) => {
       setPayments(res.data.challenges)
-      console.log(res.data.challenges)
       setRowCount(res?.data?.totalCount)
     })
   }
 
   useEffect(() => {
     fechData()
-  }, [pagination])
+  }, [pagination, sorting])
 
   const payemntTable = useMemo(
     () => [
@@ -67,9 +67,23 @@ const Payments = () => {
         size: 200,
       },
       {
+        accessorKey: 'creator_result_image',
+
+        header: 'creator_result_image',
+
+        size: 200,
+      },
+      {
         accessorKey: 'joiner_result',
 
         header: 'joiner_result',
+
+        size: 200,
+      },
+      {
+        accessorKey: 'joiner_result_image',
+
+        header: 'joiner_result_image',
 
         size: 200,
       },
@@ -98,15 +112,43 @@ const Payments = () => {
     return payments.map((payment) => ({
       id: payment.id,
       creatorUser: payment.creatorUser?.mobile,
+      creator_result_image: payment.creator_result_image,
       joinerUser: payment.joinerUser?.mobile,
+      joiner_result_image: payment.joiner_result_image,
       creator_result: payment.creator_result,
       joiner_result: payment.joiner_result,
       challenge_status: payment.challenge_status,
     }))
   }, [payments])
+
   const columns = useMemo(
     () =>
       payemntTable.map((item) => {
+        if (item.header === 'creator_result_image' || item.header === 'joiner_result_image') {
+          return {
+            ...item,
+            Cell: ({ row }) => (
+              <>
+                {row?.original[item.header] !== undefined ? (
+                  <img
+                    src={`${baseAddress}/upload/${row?.original[item.header]}`}
+                    alt="No Image"
+                    style={{
+                      width: '50px',
+                      height: '50px',
+                      objectFit: 'cover',
+                      objectPosition: 'top',
+                    }}
+                  />
+                ) : (
+                  <span>
+                    No image
+                  </span>
+                )}
+              </>
+            ),
+          };
+        }
         if (item.header === 'action') {
           return {
             ...item,
@@ -128,6 +170,7 @@ const Payments = () => {
 
   return (
     <>
+      <button type="button" className="btn btn btn-primary mb-3 text-end" onClick={() => fechData()}>refresh</button>
       <MaterialReactTable
         columns={columns}
         data={formattedData}
@@ -153,6 +196,7 @@ const Payments = () => {
           placeholder: `Search Number`,
         }}
       />
+      {/* </CContainer> */}
     </>
   )
 }

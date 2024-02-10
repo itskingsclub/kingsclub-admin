@@ -4,7 +4,7 @@ import {
   cilBell,
   cilCalculator,
   cilChartPie,
-  cilCursor,
+  cibGenius,
   cilDescription,
   cilDrop,
   cilNotes,
@@ -13,7 +13,7 @@ import {
   cilPuzzle,
   cilSpeedometer,
   cilStar,
-  cibAngular,
+  cibElementary,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -42,7 +42,13 @@ const _nav = [
     component: CNavItem,
     name: 'Challenges',
     to: '/challenges',
-    icon: <CIcon icon={cibAngular} customClassName="nav-icon" />,
+    icon: <CIcon icon={cibGenius} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Payments',
+    to: '/payments',
+    icon: <CIcon icon={cibElementary} customClassName="nav-icon" />,
   },
   {
     component: CNavTitle,

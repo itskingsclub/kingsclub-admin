@@ -1,26 +1,36 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useParams, navigate, useNavigate } from 'react-router-dom'
 import { myChallange } from 'src/service/apicalls'
-import baseAddress from 'src/service/baseAddress'
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 
 const Bethistory = () => {
   const { id } = useParams()
   const navigate = useNavigate()
-  const [bat, setBat] = useState('')
+  const [bat, setBat] = useState([])
+  const [rowCount, setRowCount] = useState(10)
+  const [columnFilters, setColumnFilters] = useState([])
+  const [globalFilter, setGlobalFilter] = useState('')
+  const [sorting, setSorting] = useState([{ desc: false, id: 'challenge_status' }])
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  })
   const fechData = () => {
     const data = {
       id: id,
+      offset: pagination.pageIndex * pagination.pageSize,
+      limit: pagination?.pageSize,
+      sort: 'id',
+      order: 'DESC',
     }
     myChallange(data).then((res) => {
-      console.log('res', res.data)
-      setBat(res.data)
+      setBat(res.data.challenges)
+      setRowCount(res?.data?.totalCount)
     })
   }
-  console.log('bat', bat)
   useEffect(() => {
     fechData()
-  }, [])
+  }, [pagination, sorting])
   const batTable = useMemo(
     () => [
       {
@@ -69,15 +79,18 @@ const Bethistory = () => {
 
     [],
   )
+  const formattedData = useMemo(() => {
+    return bat.map((bat) => ({
+      id: bat.id,
+      creatorUser: bat.creatorUser?.mobile,
+      creator: bat.creator,
+      amount: bat.amount,
+      challenge_status: bat.challenge_status,
+    }))
+  }, [bat])
   const columns = useMemo(
     () =>
       batTable.map((item) => {
-        if (item.header === 'creatorUser') {
-          return {
-            ...item,
-            Cell: ({ row }) => <span>{row?.original?.creatorUser?.mobile}</span>,
-          }
-        }
         if (item.header === 'action') {
           return {
             ...item,
@@ -96,15 +109,6 @@ const Bethistory = () => {
       }),
     [],
   )
-  // bat.propTypes = {
-  //   row: PropTypes.shape({
-  //     original: PropTypes.shape({
-  //       creatorUser: PropTypes.shape({
-  //         mobile: PropTypes.string,
-  //       }),
-  //     }),
-  //   }),
-  // }
   return (
     <>
       <div className="d-flex gap-3 mb-4">
@@ -128,14 +132,27 @@ const Bethistory = () => {
       </div>
       <MaterialReactTable
         columns={columns}
-        data={bat}
+        data={formattedData}
         getRowId={(row) => row.id}
+        initialState={{ showColumnFilters: false }}
         manualFiltering
         manualPagination
+        onColumnFiltersChange={setColumnFilters}
+        onGlobalFilterChange={setGlobalFilter}
+        onPaginationChange={setPagination}
+        onSortingChange={setSorting}
+        rowCount={rowCount}
         enableStickyHeader
         enableStickyFooter
+        state={{
+          columnFilters,
+          globalFilter,
+          pagination,
+          sorting,
+          enableStickyHeader: true,
+        }}
         muiSearchTextFieldProps={{
-          placeholder: `Search Number`,
+          placeholder: `Search Bat Id`,
         }}
       />
     </>

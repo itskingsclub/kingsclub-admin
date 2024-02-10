@@ -48,7 +48,7 @@ const User = () => {
                 <span className="info-value">{user.id}</span>
               </div>
               <div className="info-item">
-                <span className="info-label">User Name:</span>
+                <span className="info-label">Name:</span>
                 <span className="info-value">{user.name}</span>
               </div>
               <div className="info-item">
@@ -74,27 +74,27 @@ const User = () => {
                 </span>
               </div>
               <div className="info-item">
-                <span className="info-label">User Mobile:</span>
+                <span className="info-label">Mobile:</span>
                 <span className="info-value">{user.mobile}</span>
               </div>
               <div className="info-item">
-                <span className="info-label">User Game Coin:</span>
+                <span className="info-label">Game Coin:</span>
                 <span className="info-value">{user.game_coin}</span>
               </div>
               <div className="info-item">
-                <span className="info-label">User Refer Coin:</span>
+                <span className="info-label">Refer Coin:</span>
                 <span className="info-value">{user.refer_coin}</span>
               </div>
               <div className="info-item">
-                <span className="info-label">User Win Coin:</span>
+                <span className="info-label">Win Coin:</span>
                 <span className="info-value">{user.win_coin}</span>
               </div>
               <div className="info-item">
-                <span className="info-label">User Invite Code:</span>
+                <span className="info-label">Invite Code:</span>
                 <span className="info-value">{user.invite_code}</span>
               </div>
               <div className="info-item">
-                <span className="info-label">User Address:</span>
+                <span className="info-label">Address:</span>
                 <span className="info-value">{user.address}</span>
               </div>
             </div>

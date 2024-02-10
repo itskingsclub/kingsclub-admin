@@ -1,16 +1,31 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { useParams, navigate, useNavigate } from 'react-router-dom'
-import { myChallange, myPayment } from 'src/service/apicalls'
+import React, { useState, useMemo, useEffect } from 'react'
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
+import { getAllUsers, getPayments } from 'src/service/apicalls'
+import { CAvatar } from '@coreui/react'
+import baseAddress from 'src/service/baseAddress'
+import { useNavigate } from 'react-router-dom'
+const data = [
+  {
+    id: '2',
+    profile: '2',
+    name: 'mukesh jat',
+    mobile: 1234567890,
+    email: 'muukesh@gmail.com',
+    game_coin: 12312,
+    address: '261 Erdman Ford',
+    city: 'East Daphne',
+    state: 'Kentucky',
+  },
+]
 
-const Backstatement = () => {
-  const { id } = useParams()
+const Payments = () => {
+  //should be memoized or stable
   const navigate = useNavigate()
-  const [mypayment, setMypayment] = useState([])
+  const [payments, setPayments] = useState([])
   const [rowCount, setRowCount] = useState(10)
   const [columnFilters, setColumnFilters] = useState([])
   const [globalFilter, setGlobalFilter] = useState('')
-  const [sorting, setSorting] = useState([{ desc: false, id: 'id' }])
+  const [sorting, setSorting] = useState([{ desc: true, id: 'payment_status' }])
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
@@ -20,23 +35,18 @@ const Backstatement = () => {
       offset: pagination.pageIndex * pagination.pageSize,
       limit: pagination?.pageSize,
       sort: 'id',
-      order: 'DESC',
-      id: id,
+      order: sorting[0].desc ? 'ASC' : 'DSC',
     }
-    myPayment(data).then((res) => {
-      setMypayment(res.data.payemnts)
-      console.log("res", res.data.payemnts)
+    getPayments(data).then((res) => {
+      setPayments(res.data.payments)
+      console.log("res", res.data)
       setRowCount(res?.data?.totalCount)
     })
   }
+
   useEffect(() => {
     fechData()
-  }, [pagination, sorting])
-
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
+  }, [pagination])
 
   const paymentTable = useMemo(
     () => [
@@ -48,46 +58,33 @@ const Backstatement = () => {
         size: 50,
       },
       {
+        accessorKey: 'user_id', //access nested data with dot notation
+
+        header: 'user_id',
+
+        size: 30,
+      },
+      {
         accessorKey: 'amount', //access nested data with dot notation
 
         header: 'amount',
 
-        size: 30,
-      },
-      {
-        accessorKey: 'payment_id', //access nested data with dot notation
-
-        header: 'payment_id',
-
-        size: 30,
-      },
-      {
-        accessorKey: 'updatedAt', //access nested data with dot notation
-
-        header: 'updatedAt',
-
-        size: 30,
+        size: 100,
       },
       {
         accessorKey: 'payment_mode', //access nested data with dot notation
 
         header: 'payment_mode',
 
-        size: 30,
+        size: 150,
       },
-      {
-        accessorKey: 'type', //access nested data with dot notation
 
-        header: 'type',
-
-        size: 30,
-      },
       {
-        accessorKey: 'payment_status', //access nested data with dot notation
+        accessorKey: 'payment_status',
 
         header: 'payment_status',
 
-        size: 100,
+        size: 200,
       },
       {
         accessorKey: 'action',
@@ -100,28 +97,29 @@ const Backstatement = () => {
 
     [],
   )
+  // console.log('column', columns)
+
+  // Map the users data to match the expected format
   const formattedData = useMemo(() => {
-    return mypayment.map((payment) => ({
+    return payments.map((payment) => ({
       id: payment.id,
+      user_id: payment.user_id,
       amount: payment.amount,
-      updatedAt: formatDate(payment.updatedAt),
-      payment_id: payment.payment_id,
       payment_mode: payment.payment_mode,
       payment_status: payment.payment_status,
-      type: payment.type,
     }))
-  }, [mypayment])
+  }, [payments])
   const columns = useMemo(
     () =>
-      paymentTable.map((item) => {
+    paymentTable.map((item) => {
         if (item.header === 'action') {
           return {
             ...item,
-            Cell: () => (
+            Cell: ({ row }) => (
               <button
                 type="button"
                 className="btn btn btn-primary"
-                onClick={() => console.log('object')}
+                onClick={() => navigate(`/payment/${row?.original?.id}`)}
               >
                 Action
               </button>
@@ -130,29 +128,11 @@ const Backstatement = () => {
         }
         return item
       }),
-    [],
+    [paymentTable],
   )
+
   return (
     <>
-      <div className="d-flex gap-3 mb-4">
-        <button
-          className="btn btn-primary"
-          type="button"
-          onClick={() => navigate(`/user/${id}/profile`)}
-        >
-          Profile
-        </button>
-        <button
-          className="btn btn-primary"
-          type="button"
-          onClick={() => navigate(`/user/${id}/bethistory`)}
-        >
-          Bet Histroy
-        </button>
-        <button className="btn btn-primary active" type="button">
-          Account Statement
-        </button>
-      </div>
       <MaterialReactTable
         columns={columns}
         data={formattedData}
@@ -175,11 +155,11 @@ const Backstatement = () => {
           enableStickyHeader: true,
         }}
         muiSearchTextFieldProps={{
-          placeholder: `Search Bat Id`,
+          placeholder: `Search Number`,
         }}
       />
     </>
   )
 }
 
-export default Backstatement
+export default Payments
