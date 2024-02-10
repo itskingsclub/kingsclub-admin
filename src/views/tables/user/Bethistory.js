@@ -134,7 +134,7 @@ const Bethistory = () => {
         columns={columns}
         data={formattedData}
         getRowId={(row) => row.id}
-        initialState={{ showColumnFilters: false }}
+        initialState={{ showColumnFilters: false, density: 'compact' }}
         manualFiltering
         manualPagination
         onColumnFiltersChange={setColumnFilters}

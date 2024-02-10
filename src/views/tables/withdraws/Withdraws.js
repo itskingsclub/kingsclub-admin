@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
-import { getAllUsers } from 'src/service/apicalls'
+import { getAllUsers, getPayments } from 'src/service/apicalls'
 import { CAvatar } from '@coreui/react'
 import baseAddress from 'src/service/baseAddress'
 import { useNavigate } from 'react-router-dom'
@@ -18,14 +18,14 @@ const data = [
   },
 ]
 
-const Users = () => {
+const Withdraws = () => {
   //should be memoized or stable
   const navigate = useNavigate()
-  const [users, setUsers] = useState([])
+  const [payments, setPayments] = useState([])
   const [rowCount, setRowCount] = useState(10)
   const [columnFilters, setColumnFilters] = useState([])
   const [globalFilter, setGlobalFilter] = useState('')
-  const [sorting, setSorting] = useState([{ desc: true, id: 'game_coin' }])
+  const [sorting, setSorting] = useState([{ desc: true, id: 'updatedAt' }])
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
@@ -34,12 +34,12 @@ const Users = () => {
     const data = {
       offset: pagination.pageIndex * pagination.pageSize,
       limit: pagination?.pageSize,
-      sort: 'id',
+      sort: sorting.length > 0 ? sorting[0]?.id : "updatedAt",
       order: sorting[0].desc ? 'ASC' : 'DSC',
     }
-    getAllUsers(data).then((res) => {
-      setUsers(res.data.users)
-      console.log(res.data.users)
+    getPayments(data).then((res) => {
+      setPayments(res.data.payments)
+      console.log("res", res.data)
       setRowCount(res?.data?.totalCount)
     })
   }
@@ -48,7 +48,7 @@ const Users = () => {
     fechData()
   }, [pagination])
 
-  const userTable = useMemo(
+  const paymentTable = useMemo(
     () => [
       {
         accessorKey: 'id', //access nested data with dot notation
@@ -58,58 +58,41 @@ const Users = () => {
         size: 50,
       },
       {
-        accessorKey: 'profile', //access nested data with dot notation
+        accessorKey: 'user_id', //access nested data with dot notation
 
-        header: 'profile',
+        header: 'user_id',
 
         size: 30,
       },
       {
-        accessorKey: 'name', //access nested data with dot notation
+        accessorKey: 'amount', //access nested data with dot notation
 
-        header: 'Full Name',
+        header: 'amount',
 
         size: 100,
       },
       {
-        accessorKey: 'mobile', //access nested data with dot notation
+        accessorKey: 'payment_mode', //access nested data with dot notation
 
-        header: 'mobile number',
+        header: 'payment_mode',
+
+        size: 150,
+      },
+      {
+        accessorKey: 'updatedAt', //access nested data with dot notation
+
+        header: 'updatedAt',
 
         size: 150,
       },
 
       {
-        accessorKey: 'email',
+        accessorKey: 'payment_status',
 
-        header: 'Email',
-
-        size: 200,
-      },
-
-      {
-        accessorKey: 'game_coin', //normal accessorKey
-
-        header: 'game_coin',
+        header: 'payment_status',
 
         size: 200,
       },
-
-      // {
-      //   accessorKey: 'city',
-
-      //   header: 'City',
-
-      //   size: 150,
-      // },
-
-      // {
-      //   accessorKey: 'state',
-
-      //   header: 'State',
-
-      //   size: 150,
-      // },
       {
         accessorKey: 'action',
 
@@ -122,50 +105,25 @@ const Users = () => {
     [],
   )
   // console.log('column', columns)
-
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
   // Map the users data to match the expected format
   const formattedData = useMemo(() => {
-    return users.map((user) => ({
-      id: user.id,
-      profile: user.profile,
-      name: user.name,
-      mobile: user.mobile,
-      email: user.email,
-      game_coin: user.game_coin,
-      address: user.address,
-      city: user.city,
-      state: user.state,
+    return payments.filter(payment => payment.type === "Withdraw").map((payment) => ({
+      id: payment.id,
+      type: payment.type,
+      user_id: payment.user_id,
+      amount: payment.amount,
+      payment_mode: payment.payment_mode,
+      updatedAt: formatDate(payment.updatedAt),
+      payment_status: payment.payment_status,
     }))
-  }, [users])
+  }, [payments])
   const columns = useMemo(
     () =>
-      userTable.map((item) => {
-        if (item.header === 'profile') {
-          return {
-            ...item,
-            Cell: ({ row }) => (
-              <>
-                {row?.original?.profile !== null ? (
-                  <img
-                    src={`${baseAddress}/upload/${row?.original?.profile}`}
-                    alt="Profile"
-                    style={{
-                      width: '50px',
-                      height: '50px',
-                      borderRadius: '50%',
-                      objectFit: 'cover',
-                      objectPosition: 'top',
-                    }}
-                  />
-                ) : (
-                  <div className="avatar avatar-lg bg-secondary">
-                    {(row?.original?.name).split('')[0].toUpperCase()}
-                  </div>
-                )}
-              </>
-            ),
-          }
-        }
+      paymentTable.map((item) => {
         if (item.header === 'action') {
           return {
             ...item,
@@ -173,16 +131,16 @@ const Users = () => {
               <button
                 type="button"
                 className="btn btn btn-primary"
-                onClick={() => navigate(`/user/${row?.original?.id}/profile`)}
+                onClick={() => navigate(`/withdraw/${row?.original?.id}`)}
               >
-                Profile
+                Action
               </button>
             ),
           }
         }
         return item
       }),
-    [userTable],
+    [paymentTable],
   )
 
   return (
@@ -216,4 +174,4 @@ const Users = () => {
   )
 }
 
-export default Users
+export default Withdraws

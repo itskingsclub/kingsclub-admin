@@ -1,8 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getPaymentById} from 'src/service/apicalls'
+import { getPaymentById } from 'src/service/apicalls'
 
-const Payment = () => {
+const Withdraw = () => {
     const { id } = useParams()
     const navigate = useNavigate()
     const [payment, setPayment] = useState('')
@@ -20,7 +20,7 @@ const Payment = () => {
         <>
             <div className="user-info-container mt-3 mb-4">
                 <div className="user-details">
-                    <div className="user-heading">Payment Info</div>
+                    <div className="user-heading">Deposit Info</div>
                     <div className="user-info">
                         <div className="user-info-left">
                             <div className="info-item">
@@ -51,4 +51,4 @@ const Payment = () => {
     )
 }
 
-export default Payment
+export default Withdraw

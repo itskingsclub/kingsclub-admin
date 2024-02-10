@@ -46,8 +46,14 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Payments',
-    to: '/payments',
+    name: 'Deposits',
+    to: '/deposits',
+    icon: <CIcon icon={cibElementary} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Withdraws',
+    to: '/withdraws',
     icon: <CIcon icon={cibElementary} customClassName="nav-icon" />,
   },
   {

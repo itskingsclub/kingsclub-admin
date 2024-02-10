@@ -1,9 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import { getAllUsers, getChallange } from 'src/service/apicalls'
-import { CBreadcrumbItem, CHeaderDivider, CContainer, CBreadcrumb, CHeader } from '@coreui/react'
+import { CButton, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CImage, CFormSelect, CForm, CFormLabel, CFormInput } from '@coreui/react'
 import baseAddress from 'src/service/baseAddress'
 import { useNavigate } from 'react-router-dom'
+import baseaddress from 'src/service/baseAddress'
 
 const Payments = () => {
   //should be memoized or stable
@@ -12,11 +13,52 @@ const Payments = () => {
   const [rowCount, setRowCount] = useState(10)
   const [columnFilters, setColumnFilters] = useState([])
   const [globalFilter, setGlobalFilter] = useState('')
-  const [sorting, setSorting] = useState([{ desc: false, id: 'room_code' }])
+  const [sorting, setSorting] = useState([{ desc: false, id: 'challenge_status' }])
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
   })
+  const [selectedValues, setSelectedValues] = useState({
+    creatorResult: '',
+    joinerResult: '',
+  });
+  const [challengedata, setChallengedata] = useState({})
+
+  const [status, setStatus] = useState(false)
+  const [image, setImage] = useState(false)
+  const [showModal, setShowModal] = useState(false);
+  const [actionModal, setActionModal] = useState(false);
+
+  const openModal = (image, status) => {
+    console.log("status", status)
+    setImage(image)
+    if (status === "creator_result_image") {
+      setStatus(true)
+    } else {
+      setStatus(false)
+    }
+    setShowModal(true);
+  };
+  const openActionModal = (data) => {
+    setActionModal(true);
+    console.log("data", data)
+    setChallengedata(data)
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setActionModal(false);
+  };
+  const handleSelectChange = (fieldName, value) => {
+    setSelectedValues((prevValues) => ({
+      ...prevValues,
+      [fieldName]: value,
+    }));
+  };
+  const handleFormSubmit = () => {
+    console.log("selectedValues", selectedValues)
+    console.log("challengedata", challengedata)
+  };
   const fechData = () => {
     const data = {
       offset: pagination.pageIndex * pagination.pageSize,
@@ -139,6 +181,7 @@ const Payments = () => {
                       objectFit: 'cover',
                       objectPosition: 'top',
                     }}
+                    onClick={() => openModal(row?.original[item.header], item.header)}
                   />
                 ) : (
                   <span>
@@ -153,13 +196,22 @@ const Payments = () => {
           return {
             ...item,
             Cell: ({ row }) => (
-              <button
-                type="button"
-                className="btn btn btn-primary"
-                onClick={() => navigate(`/challenge/${row?.original?.id}`)}
-              >
-                Status
-              </button>
+              <>
+                <button
+                  type="button"
+                  className="btn btn btn-primary me-2"
+                  onClick={() => openActionModal(row?.original)}
+                >
+                  Action
+                </button>
+                <button
+                  type="button"
+                  className="btn btn btn-primary"
+                  onClick={() => navigate(`/challenge/${row?.original?.id}`)}
+                >
+                  Status
+                </button>
+              </>
             ),
           }
         }
@@ -175,7 +227,7 @@ const Payments = () => {
         columns={columns}
         data={formattedData}
         getRowId={(row) => row.id}
-        initialState={{ showColumnFilters: false }}
+        initialState={{ showColumnFilters: false, density: 'compact' }}
         manualFiltering
         manualPagination
         onColumnFiltersChange={setColumnFilters}
@@ -196,6 +248,72 @@ const Payments = () => {
           placeholder: `Search Number`,
         }}
       />
+
+      <CModal
+        visible={actionModal}
+        aria-labelledby="LiveDemoExampleLabel"
+      >
+        <CModalHeader onClick={closeModal}>
+          <CModalTitle id="LiveDemoExampleLabel">Action</CModalTitle>
+        </CModalHeader>
+        <CModalBody className="clearfix">
+          <CForm>
+            <div className="mb-3">
+              <CFormLabel htmlFor="exampleFormControlInput1">Creator result</CFormLabel>
+              <CFormSelect style={{ width: '100%' }}
+                aria-label="Default select example"
+                options={[
+                  'Open this select menu',
+                  { label: 'Win', value: 'win' },
+                  { label: 'Lose', value: 'Lose' },
+                  { label: 'Cancel', value: 'Cancel' }
+                ]}
+                onChange={(e) => handleSelectChange('creatorResult', e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <CFormLabel htmlFor="exampleFormControlInput1">Joiner result</CFormLabel>
+              <CFormSelect style={{ width: '100%' }}
+                aria-label="Default select example"
+                options={[
+                  'Open this select menu',
+                  { label: 'Win', value: 'win' },
+                  { label: 'Lose', value: 'Lose' },
+                  { label: 'Cancel', value: 'Cancel' }
+                ]}
+                onChange={(e) => handleSelectChange('joinerResult', e.target.value)}
+              />
+            </div>
+          </CForm>
+
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={handleFormSubmit}>
+            Submit
+          </CButton>
+          <CButton color="secondary" onClick={closeModal}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
+      <CModal
+        visible={showModal}
+        onClick={closeModal}
+        aria-labelledby="LiveDemoExampleLabel"
+      >
+        <CModalHeader onClick={closeModal}>
+          <CModalTitle id="LiveDemoExampleLabel">{status ? "Creator Image Result" : "Joiner result Image"}</CModalTitle>
+        </CModalHeader>
+        <CModalBody className="clearfix">
+
+          <CImage fluid align="center" src={`${baseaddress}/upload/${image}`} alt="Full Image" />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={() => setShowModal(false)}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
       {/* </CContainer> */}
     </>
   )

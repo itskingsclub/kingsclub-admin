@@ -18,14 +18,14 @@ const data = [
   },
 ]
 
-const Payments = () => {
+const Deposits = () => {
   //should be memoized or stable
   const navigate = useNavigate()
   const [payments, setPayments] = useState([])
   const [rowCount, setRowCount] = useState(10)
   const [columnFilters, setColumnFilters] = useState([])
   const [globalFilter, setGlobalFilter] = useState('')
-  const [sorting, setSorting] = useState([{ desc: true, id: 'payment_status' }])
+  const [sorting, setSorting] = useState([{ desc: true, id: 'updatedAt' }])
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
@@ -34,7 +34,7 @@ const Payments = () => {
     const data = {
       offset: pagination.pageIndex * pagination.pageSize,
       limit: pagination?.pageSize,
-      sort: 'id',
+      sort: sorting.length > 0 ? sorting[0]?.id : "updatedAt",
       order: sorting[0].desc ? 'ASC' : 'DSC',
     }
     getPayments(data).then((res) => {
@@ -78,6 +78,13 @@ const Payments = () => {
 
         size: 150,
       },
+      {
+        accessorKey: 'updatedAt', //access nested data with dot notation
+
+        header: 'updatedAt',
+
+        size: 150,
+      },
 
       {
         accessorKey: 'payment_status',
@@ -98,20 +105,25 @@ const Payments = () => {
     [],
   )
   // console.log('column', columns)
-
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
   // Map the users data to match the expected format
   const formattedData = useMemo(() => {
-    return payments.map((payment) => ({
+    return payments.filter(payment => payment.type === "Deposit").map((payment) => ({
       id: payment.id,
+      type: payment.type,
       user_id: payment.user_id,
       amount: payment.amount,
       payment_mode: payment.payment_mode,
+      updatedAt: formatDate(payment.updatedAt),
       payment_status: payment.payment_status,
     }))
   }, [payments])
   const columns = useMemo(
     () =>
-    paymentTable.map((item) => {
+      paymentTable.map((item) => {
         if (item.header === 'action') {
           return {
             ...item,
@@ -119,7 +131,7 @@ const Payments = () => {
               <button
                 type="button"
                 className="btn btn btn-primary"
-                onClick={() => navigate(`/payment/${row?.original?.id}`)}
+                onClick={() => navigate(`/deposit/${row?.original?.id}`)}
               >
                 Action
               </button>
@@ -137,7 +149,7 @@ const Payments = () => {
         columns={columns}
         data={formattedData}
         getRowId={(row) => row.id}
-        initialState={{ showColumnFilters: false }}
+        initialState={{ showColumnFilters: false, density: 'compact' }}
         manualFiltering
         manualPagination
         onColumnFiltersChange={setColumnFilters}
@@ -162,4 +174,4 @@ const Payments = () => {
   )
 }
 
-export default Payments
+export default Deposits
