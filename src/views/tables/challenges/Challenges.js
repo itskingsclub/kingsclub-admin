@@ -1,13 +1,15 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect, useContext } from 'react'
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
-import { getAllUsers, getChallange } from 'src/service/apicalls'
+import { clearChallenge, getAllUsers, getChallange } from 'src/service/apicalls'
 import { CButton, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CImage, CFormSelect, CForm, CFormLabel, CFormInput } from '@coreui/react'
 import baseAddress from 'src/service/baseAddress'
 import { useNavigate } from 'react-router-dom'
 import baseaddress from 'src/service/baseAddress'
+import { UserContext } from 'src/userDetail/Userdetail'
 
 const Payments = () => {
   //should be memoized or stable
+  const { userDetail } = useContext(UserContext)
   const navigate = useNavigate()
   const [payments, setPayments] = useState([])
   const [rowCount, setRowCount] = useState(10)
@@ -21,6 +23,7 @@ const Payments = () => {
   const [selectedValues, setSelectedValues] = useState({
     creatorResult: '',
     joinerResult: '',
+    challengeStatus: '',
   });
   const [challengedata, setChallengedata] = useState({})
 
@@ -56,8 +59,20 @@ const Payments = () => {
     }));
   };
   const handleFormSubmit = () => {
-    console.log("selectedValues", selectedValues)
-    console.log("challengedata", challengedata)
+    const data = {
+      admin_id: userDetail.id,
+      id: challengedata.id,
+      creator_result: selectedValues.creatorResult,
+      joiner_result: selectedValues.joinerResult,
+      challenge_status: selectedValues.challengeStatus,
+      updated_by: userDetail.id,
+    }
+    console.log("data", data)
+    clearChallenge(data).then((res) => {
+      console.log("res.data", res.data)
+      closeModal()
+      fechData()
+    })
   };
   const fechData = () => {
     const data = {
@@ -264,7 +279,7 @@ const Payments = () => {
                 aria-label="Default select example"
                 options={[
                   'Open this select menu',
-                  { label: 'Win', value: 'win' },
+                  { label: 'Win', value: 'Win' },
                   { label: 'Lose', value: 'Lose' },
                   { label: 'Cancel', value: 'Cancel' }
                 ]}
@@ -277,11 +292,24 @@ const Payments = () => {
                 aria-label="Default select example"
                 options={[
                   'Open this select menu',
-                  { label: 'Win', value: 'win' },
+                  { label: 'Win', value: 'Win' },
                   { label: 'Lose', value: 'Lose' },
                   { label: 'Cancel', value: 'Cancel' }
                 ]}
                 onChange={(e) => handleSelectChange('joinerResult', e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <CFormLabel htmlFor="exampleFormControlInput1">Joiner result</CFormLabel>
+              <CFormSelect style={{ width: '100%' }}
+                aria-label="Default select example"
+                options={[
+                  'Open this select menu',
+                  { label: 'Clear', value: 'Clear' },
+                  { label: 'Review', value: 'Review' },
+                  { label: 'Cancel', value: 'Cancel' }
+                ]}
+                onChange={(e) => handleSelectChange('challengeStatus', e.target.value)}
               />
             </div>
           </CForm>

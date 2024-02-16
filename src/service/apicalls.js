@@ -120,6 +120,17 @@ export async function updateResult(payload) {
     console.error('Error in updateResult:', error)
   }
 }
+export async function clearChallenge(payload) {
+  console.log('payload', payload)
+  try {
+    const response = await APIKit.put(`/challenge/clear-challenge`, payload)
+    return response
+  } catch (error) {
+    console.error('Error in updateResult:', error)
+  }
+}
+
+
 
 export async function getPayments(payload) {
   try {

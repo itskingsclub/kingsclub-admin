@@ -20,11 +20,12 @@ const Bethistory = () => {
       id: id,
       offset: pagination.pageIndex * pagination.pageSize,
       limit: pagination?.pageSize,
-      sort: 'id',
-      order: 'DESC',
+      sort: sorting.length > 0 ? sorting[0]?.id : "challenge_status",
+      order: sorting.length > 0 ? sorting[0].desc ? 'ASC' : 'DESC' : 'ASC',
     }
     myChallange(data).then((res) => {
       setBat(res.data.challenges)
+      console.log("res", res.data.challenges)
       setRowCount(res?.data?.totalCount)
     })
   }
@@ -41,16 +42,16 @@ const Bethistory = () => {
         size: 50,
       },
       {
-        accessorKey: 'creator', //access nested data with dot notation
+        accessorKey: 'creatorUser', //access nested data with dot notation
 
-        header: 'Creator',
+        header: 'creatorUser',
 
         size: 30,
       },
       {
-        accessorKey: 'creatorUser', //access nested data with dot notation
+        accessorKey: 'joinerUser', //access nested data with dot notation
 
-        header: 'creatorUser',
+        header: 'joinerUser',
 
         size: 30,
       },
@@ -69,6 +70,13 @@ const Bethistory = () => {
         size: 100,
       },
       {
+        accessorKey: 'challenge_result', //access nested data with dot notation
+
+        header: 'challenge_result',
+
+        size: 100,
+      },
+      {
         accessorKey: 'action',
 
         header: 'action',
@@ -83,9 +91,10 @@ const Bethistory = () => {
     return bat.map((bat) => ({
       id: bat.id,
       creatorUser: bat.creatorUser?.mobile,
-      creator: bat.creator,
+      joinerUser: bat.joinerUser?.mobile,
       amount: bat.amount,
       challenge_status: bat.challenge_status,
+      challenge_result: id == bat.creator ? bat.creator_result : bat.joiner_result
     }))
   }, [bat])
   const columns = useMemo(
@@ -100,7 +109,7 @@ const Bethistory = () => {
                 className="btn btn btn-primary"
                 onClick={() => console.log('object')}
               >
-                Profile
+                Action
               </button>
             ),
           }

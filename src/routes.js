@@ -11,6 +11,7 @@ const Deposit = React.lazy(() => import('./views/tables/deposit/Deposit'))
 const Withdraw = React.lazy(() => import('./views/tables/withdraw/Withdraw'))
 const Backstatement = React.lazy(() => import('./views/tables/user/Backstatement'))
 const Bethistory = React.lazy(() => import('./views/tables/user/Bethistory'))
+const Adduser = React.lazy(() => import('./views/adduser/Adduser'))
 
 //Forms
 const ChecksRadios = React.lazy(() => import('./views/forms/checks-radios/ChecksRadios'))
@@ -35,6 +36,7 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
+  { path: '/adduser', name: 'Adduser', element: Adduser },
   { path: '/users', name: 'Users', element: Users },
   { path: '/challenges', name: 'Challenges', element: Challenges },
   { path: '/deposits', name: 'Deposits', element: Deposits },

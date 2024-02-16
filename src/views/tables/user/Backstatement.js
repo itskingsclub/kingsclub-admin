@@ -10,17 +10,18 @@ const Backstatement = () => {
   const [rowCount, setRowCount] = useState(10)
   const [columnFilters, setColumnFilters] = useState([])
   const [globalFilter, setGlobalFilter] = useState('')
-  const [sorting, setSorting] = useState([{ desc: false, id: 'id' }])
+  const [sorting, setSorting] = useState([{ desc: false, id: 'updatedAt' }])
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
   })
+
   const fechData = () => {
     const data = {
       offset: pagination.pageIndex * pagination.pageSize,
       limit: pagination?.pageSize,
-      sort: 'id',
-      order: 'DESC',
+      sort: sorting.length > 0 ? sorting[0]?.id : "updatedAt",
+      order: sorting.length > 0 ? sorting[0].desc ? 'DESC' : 'ASC' : 'DESC',
       id: id,
     }
     myPayment(data).then((res) => {

@@ -25,7 +25,7 @@ const Users = () => {
   const [rowCount, setRowCount] = useState(10)
   const [columnFilters, setColumnFilters] = useState([])
   const [globalFilter, setGlobalFilter] = useState('')
-  const [sorting, setSorting] = useState([{ desc: true, id: 'game_coin' }])
+  const [sorting, setSorting] = useState([{ desc: true, id: 'id' }])
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
@@ -34,8 +34,8 @@ const Users = () => {
     const data = {
       offset: pagination.pageIndex * pagination.pageSize,
       limit: pagination?.pageSize,
-      sort: 'id',
-      order: sorting[0].desc ? 'ASC' : 'DSC',
+      sort: sorting.length > 0 ? sorting[0]?.id : "",
+      order: sorting.length > 0 ? sorting[0].desc ? 'ASC' : 'DESC' : 'ASC',
     }
     getAllUsers(data).then((res) => {
       setUsers(res.data.users)
@@ -46,7 +46,7 @@ const Users = () => {
 
   useEffect(() => {
     fechData()
-  }, [pagination])
+  }, [pagination, sorting])
 
   const userTable = useMemo(
     () => [
@@ -187,6 +187,10 @@ const Users = () => {
 
   return (
     <>
+      <div className="d-flex justify-content-between mb-3">
+        <button type="button" className="btn btn btn-primary" onClick={() => fechData()}>refresh</button>
+        <button type="button" className="btn btn btn-primary" onClick={() => navigate(`/adduser`)}>Add User</button>
+      </div>
       <MaterialReactTable
         columns={columns}
         data={formattedData}
