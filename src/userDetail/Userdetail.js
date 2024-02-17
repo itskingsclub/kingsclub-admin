@@ -22,10 +22,12 @@ export const UserProvider = ({ children }) => {
     if (userDetails?.id) {
       getuser(userDetails?.id)
         .then((res) => {
-          setUserDetail(res.data)
-        })
-        .catch((err) => {
-          console.log(err)
+          if (res.success) {
+            setUserDetail(res.data)
+            console.log("res", res)
+          } else {
+            console.log("error", res)
+          }
         })
     }
   }, [userDetails])

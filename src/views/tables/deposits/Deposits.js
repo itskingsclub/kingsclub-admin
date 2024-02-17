@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
-import { getAllUsers, getPayments } from 'src/service/apicalls'
+import { getAllUsers, getDeposit, getPayments } from 'src/service/apicalls'
 import { CAvatar } from '@coreui/react'
 import baseAddress from 'src/service/baseAddress'
 import { useNavigate } from 'react-router-dom'
@@ -37,7 +37,7 @@ const Deposits = () => {
       sort: sorting.length > 0 ? sorting[0]?.id : "updatedAt",
       order: sorting[0].desc ? 'ASC' : 'DSC',
     }
-    getPayments(data).then((res) => {
+    getDeposit(data).then((res) => {
       setPayments(res.data.payments)
       console.log("res", res.data)
       setRowCount(res?.data?.totalCount)

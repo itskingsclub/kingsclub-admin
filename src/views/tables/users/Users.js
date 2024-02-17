@@ -40,7 +40,10 @@ const Users = () => {
     getAllUsers(data).then((res) => {
       setUsers(res.data.users)
       console.log(res.data.users)
+      console.log("res", res)
       setRowCount(res?.data?.totalCount)
+    }).catch((error) => {
+      console.log("error", error)
     })
   }
 

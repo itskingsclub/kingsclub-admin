@@ -8,8 +8,13 @@ const User = () => {
   const navigate = useNavigate()
   const [user, setUser] = useState('')
   const fechData = () => {
-    getuser(id).then((res) => {
-      setUser(res.data)
+    getuser(800).then((res) => {
+      if (res.success) {
+        setUser(res.data)
+        console.log("res", res)
+      } else {
+        console.log("error", res)
+      }
     })
   }
   console.log('user', user)

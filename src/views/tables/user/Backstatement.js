@@ -25,8 +25,8 @@ const Backstatement = () => {
       id: id,
     }
     myPayment(data).then((res) => {
-      setMypayment(res.data.payemnts)
-      console.log("res", res.data.payemnts)
+      setMypayment(res.data.payments)
+      console.log("res", res.data.payments)
       setRowCount(res?.data?.totalCount)
     })
   }

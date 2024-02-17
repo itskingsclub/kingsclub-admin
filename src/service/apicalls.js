@@ -34,7 +34,7 @@ export async function getuser(id) {
     const response = await APIKit.get(`/user/${id}`)
     return response.data
   } catch (error) {
-    return console.log(error)
+    return error?.response?.data
   }
 }
 
@@ -131,6 +131,26 @@ export async function clearChallenge(payload) {
 }
 
 
+
+export async function getWithdraw(payload) {
+  try {
+    const queryString = new URLSearchParams(payload).toString()
+    const response = await APIKit.get(`/payment/all-withdraw/?${queryString}`)
+    return response.data
+  } catch (error) {
+    return error
+  }
+}
+
+export async function getDeposit(payload) {
+  try {
+    const queryString = new URLSearchParams(payload).toString()
+    const response = await APIKit.get(`/payment/all-deposit/?${queryString}`)
+    return response.data
+  } catch (error) {
+    return error
+  }
+}
 
 export async function getPayments(payload) {
   try {
