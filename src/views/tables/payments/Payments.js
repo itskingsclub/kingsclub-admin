@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useEffect, useContext } from 'react'
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
-import { getAllUsers, getPayments, getWithdraw, updateWithdraw } from 'src/service/apicalls'
+import { getAllUsers, getDeposit, getPayments, updateDeposit } from 'src/service/apicalls'
 import { CButton, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CImage, CFormSelect, CForm, CFormLabel, CFormInput, CFormFeedback } from '@coreui/react'
-import baseAddress from 'src/service/baseAddress'
 import { useNavigate } from 'react-router-dom'
+import baseaddress from 'src/service/baseAddress'
 import { UserContext } from 'src/userDetail/Userdetail'
 const data = [
   {
@@ -19,7 +19,7 @@ const data = [
   },
 ]
 
-const Withdraws = () => {
+const Payments = () => {
   //should be memoized or stable
   const { userDetail } = useContext(UserContext)
   const navigate = useNavigate()
@@ -32,21 +32,29 @@ const Withdraws = () => {
     pageIndex: 0,
     pageSize: 10,
   })
+
   const [paymentValues, setPaymentValues] = useState({
     amount: { value: '', error: '' },
     remark: { value: '', error: '' },
     payment_status: { value: '', error: '' },
   });
   const [challengedata, setChallengedata] = useState({})
+  const [showModal, setShowModal] = useState(false);
   const [actionModal, setActionModal] = useState(false);
+  const [image, setImage] = useState(false)
 
-
+  const openModal = (image) => {
+    setImage(image)
+    setShowModal(true);
+  };
   const openActionModal = (data) => {
     setActionModal(true);
+    console.log("data", data)
     setChallengedata(data)
   };
 
   const closeModal = () => {
+    setShowModal(false);
     setActionModal(false);
   };
   const handleInputChange = (fieldName, value) => {
@@ -81,9 +89,9 @@ const Withdraws = () => {
       remark: paymentValues.remark.value,
       updated_by: userDetail.id,
     }
-    console.log("data", data)
-    updateWithdraw(data).then((res) => {
-      console.log("res.data", res?.message)
+    console.log("paymentValues", paymentValues)
+    updateDeposit(data).then((res) => {
+      console.log("res.data", res.data)
       closeModal()
       fechData()
     })
@@ -94,9 +102,9 @@ const Withdraws = () => {
       offset: pagination.pageIndex * pagination.pageSize,
       limit: pagination?.pageSize,
       sort: sorting.length > 0 ? sorting[0]?.id : "updatedAt",
-      order: sorting[0].desc ? 'ASC' : 'DSC',
+      order: sorting[0].desc ? 'DESC' : 'ASC',
     }
-    getWithdraw(data).then((res) => {
+    getPayments(data).then((res) => {
       setPayments(res.data.payments)
       console.log("res", res.data)
       setRowCount(res?.data?.totalCount)
@@ -144,6 +152,13 @@ const Withdraws = () => {
 
         size: 150,
       },
+      {
+        accessorKey: 'image', //access nested data with dot notation
+
+        header: 'image',
+
+        size: 150,
+      },
 
       {
         accessorKey: 'payment_status',
@@ -170,30 +185,66 @@ const Withdraws = () => {
   };
   // Map the users data to match the expected format
   const formattedData = useMemo(() => {
-    return payments.filter(payment => payment.type === "Withdraw").map((payment) => ({
+    return payments.filter(payment => payment.type === "Deposit").map((payment) => ({
       id: payment.id,
       type: payment.type,
       user_id: payment.user_id,
       amount: payment.amount,
       payment_mode: payment.payment_mode,
       updatedAt: formatDate(payment.updatedAt),
+      image: payment.image,
       payment_status: payment.payment_status,
     }))
   }, [payments])
   const columns = useMemo(
     () =>
       paymentTable.map((item) => {
+        if (item.header === 'image') {
+          return {
+            ...item,
+            Cell: ({ row }) => (
+              <>
+                {row?.original?.image !== undefined ? (
+                  <img
+                    src={`${baseaddress}/upload/${row?.original?.image}`}
+                    alt="No Image"
+                    style={{
+                      width: '50px',
+                      height: '50px',
+                      objectFit: 'cover',
+                      objectPosition: 'top',
+                    }}
+                    onClick={() => openModal(row?.original?.image)}
+                  />
+                ) : (
+                  <span>
+                    No image
+                  </span>
+                )}
+              </>
+            ),
+          };
+        }
         if (item.header === 'action') {
           return {
             ...item,
             Cell: ({ row }) => (
-              <button
-                type="button"
-                className="btn btn btn-primary"
-                onClick={() => openActionModal(row?.original)}
-              >
-                Action
-              </button>
+              <>
+                <button
+                  type="button"
+                  className="btn btn btn-primary me-3"
+                  onClick={() => openActionModal(row?.original)}
+                >
+                  Action
+                </button>
+                <button
+                  type="button"
+                  className="btn btn btn-primary"
+                  onClick={() => navigate(`/payment/${row?.original?.id}`)}
+                >
+                  View
+                </button>
+              </>
             ),
           }
         }
@@ -287,8 +338,26 @@ const Withdraws = () => {
           </CButton>
         </CModalFooter>
       </CModal>
+      <CModal
+        visible={showModal}
+        onClick={closeModal}
+        aria-labelledby="LiveDemoExampleLabel"
+      >
+        <CModalHeader onClick={closeModal}>
+          <CModalTitle id="LiveDemoExampleLabel">Payment Screenshot</CModalTitle>
+        </CModalHeader>
+        <CModalBody className="clearfix">
+
+          <CImage fluid align="center" src={`${baseaddress}/upload/${image}`} alt="Full Image" />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={() => setShowModal(false)}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
     </>
   )
 }
 
-export default Withdraws
+export default Payments

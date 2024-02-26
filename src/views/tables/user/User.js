@@ -8,7 +8,7 @@ const User = () => {
   const navigate = useNavigate()
   const [user, setUser] = useState('')
   const fechData = () => {
-    getuser(800).then((res) => {
+    getuser(id).then((res) => {
       if (res.success) {
         setUser(res.data)
         console.log("res", res)

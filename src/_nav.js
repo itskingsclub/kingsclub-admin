@@ -14,6 +14,7 @@ import {
   cilSpeedometer,
   cilStar,
   cibElementary,
+  cibUdacity,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -55,6 +56,12 @@ const _nav = [
     name: 'Withdraws',
     to: '/withdraws',
     icon: <CIcon icon={cibAdobeAcrobatReader} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'All Payments',
+    to: '/payments',
+    icon: <CIcon icon={cibUdacity} customClassName="nav-icon" />,
   },
   // {
   //   component: CNavTitle,

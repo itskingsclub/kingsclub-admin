@@ -143,6 +143,7 @@ export async function getWithdraw(payload) {
 }
 
 export async function getDeposit(payload) {
+  console.log("payload", payload)
   try {
     const queryString = new URLSearchParams(payload).toString()
     const response = await APIKit.get(`/payment/all-deposit/?${queryString}`)
@@ -182,9 +183,27 @@ export async function deposit(payload) {
   }
 }
 
+export async function updateDeposit(payload) {
+  try {
+    const response = await APIKit.put(`/payment/update-deposit`, payload)
+    return response.data
+  } catch (error) {
+    return error
+  }
+}
+
 export async function withdrawal(payload) {
   try {
     const response = await APIKit.post(`/payment/withdrawal`, payload)
+    return response.data
+  } catch (error) {
+    return error
+  }
+}
+
+export async function updateWithdraw(payload) {
+  try {
+    const response = await APIKit.put(`/payment/update-withdraw`, payload)
     return response.data
   } catch (error) {
     return error

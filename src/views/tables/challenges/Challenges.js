@@ -115,6 +115,13 @@ const Payments = () => {
 
         size: 100,
       },
+      {
+        accessorKey: 'room_code', //access nested data with dot notation
+
+        header: 'room_code',
+
+        size: 100,
+      },
 
       {
         accessorKey: 'creator_result',
@@ -169,6 +176,7 @@ const Payments = () => {
     return payments.map((payment) => ({
       id: payment.id,
       creatorUser: payment.creatorUser?.mobile,
+      room_code: payment.room_code,
       creator_result_image: payment.creator_result_image,
       joinerUser: payment.joinerUser?.mobile,
       joiner_result_image: payment.joiner_result_image,

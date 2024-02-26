@@ -24,7 +24,6 @@ export const UserProvider = ({ children }) => {
         .then((res) => {
           if (res.success) {
             setUserDetail(res.data)
-            console.log("res", res)
           } else {
             console.log("error", res)
           }
