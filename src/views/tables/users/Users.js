@@ -1,9 +1,11 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect, useContext } from 'react'
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
-import { getAllUsers } from 'src/service/apicalls'
+import { CButton, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CImage, CFormSelect, CForm, CFormLabel, CFormInput, CFormFeedback } from '@coreui/react'
+import { deductCoin, getAllUsers } from 'src/service/apicalls'
 import { CAvatar } from '@coreui/react'
 import baseAddress from 'src/service/baseAddress'
 import { useNavigate } from 'react-router-dom'
+import { UserContext } from 'src/userDetail/Userdetail'
 const data = [
   {
     id: '2',
@@ -21,6 +23,7 @@ const data = [
 const Users = () => {
   //should be memoized or stable
   const navigate = useNavigate()
+  const { userDetail } = useContext(UserContext)
   const [users, setUsers] = useState([])
   const [rowCount, setRowCount] = useState(10)
   const [columnFilters, setColumnFilters] = useState([])
@@ -30,6 +33,52 @@ const Users = () => {
     pageIndex: 0,
     pageSize: 10,
   })
+  const [paymentValues, setPaymentValues] = useState({
+    amount: { value: '', error: '' },
+    remark: { value: '', error: '' },
+  });
+  const [userId, setUserId] = useState({})
+  const [actionModal, setActionModal] = useState(false);
+
+  const openActionModal = (data) => {
+    setActionModal(true);
+    console.log("data", data)
+    setUserId(data)
+  };
+
+  const closeModal = () => {
+    setActionModal(false);
+  };
+  const handleInputChange = (fieldName, value) => {
+    const regexPattern = {
+      amount: /^\d+$/,
+      remark: /^(?:\s*\b\w+\b\s*){0,50}$/,
+    }
+    let isvalid = true;
+    let error = "";
+    isvalid = regexPattern[fieldName].test(value);
+    error = isvalid ? "" : `Invalid ${fieldName}`;
+    setPaymentValues((prevValues) => ({
+      ...prevValues,
+      [fieldName]: { value, error },
+    }));
+  };
+  const handleFormSubmit = () => {
+
+    const data = {
+      admin_id: userDetail.id,
+      user_id: userId,
+      amount: Number(paymentValues.amount.value),
+      remark: paymentValues.remark.value,
+    }
+    console.log("data", data)
+    deductCoin(data).then((res) => {
+      console.log("res.data", res)
+      closeModal()
+      fechData()
+    })
+  };
+
   const fechData = () => {
     const data = {
       offset: pagination.pageIndex * pagination.pageSize,
@@ -56,14 +105,14 @@ const Users = () => {
       {
         accessorKey: 'id', //access nested data with dot notation
 
-        header: 'id',
+        header: 'Id',
 
         size: 50,
       },
       {
         accessorKey: 'profile', //access nested data with dot notation
 
-        header: 'profile',
+        header: 'Profile',
 
         size: 30,
       },
@@ -77,7 +126,7 @@ const Users = () => {
       {
         accessorKey: 'mobile', //access nested data with dot notation
 
-        header: 'mobile number',
+        header: 'Mobile number',
 
         size: 150,
       },
@@ -93,7 +142,7 @@ const Users = () => {
       {
         accessorKey: 'game_coin', //normal accessorKey
 
-        header: 'game_coin',
+        header: 'Game Coin',
 
         size: 200,
       },
@@ -116,7 +165,7 @@ const Users = () => {
       {
         accessorKey: 'action',
 
-        header: 'action',
+        header: 'Action',
 
         size: 200,
       },
@@ -143,7 +192,7 @@ const Users = () => {
   const columns = useMemo(
     () =>
       userTable.map((item) => {
-        if (item.header === 'profile') {
+        if (item.header === 'Profile') {
           return {
             ...item,
             Cell: ({ row }) => (
@@ -169,17 +218,26 @@ const Users = () => {
             ),
           }
         }
-        if (item.header === 'action') {
+        if (item.header === 'Action') {
           return {
             ...item,
             Cell: ({ row }) => (
-              <button
-                type="button"
-                className="btn btn btn-primary"
-                onClick={() => navigate(`/user/${row?.original?.id}/profile`)}
-              >
-                Profile
-              </button>
+              <>
+                <button
+                  type="button"
+                  className="btn btn btn-primary me-3"
+                  onClick={() => navigate(`/user/${row?.original?.id}/profile`)}
+                >
+                  Profile
+                </button>
+                <button
+                  type="button"
+                  className="btn btn btn-primary"
+                  onClick={() => openActionModal(row?.original?.id)}
+                >
+                  Withdraw Coin
+                </button>
+              </>
             ),
           }
         }
@@ -219,6 +277,49 @@ const Users = () => {
           placeholder: `Search Number`,
         }}
       />
+      <CModal
+        visible={actionModal}
+        aria-labelledby="LiveDemoExampleLabel"
+      >
+        <CModalHeader onClick={closeModal}>
+          <CModalTitle id="LiveDemoExampleLabel">Action</CModalTitle>
+        </CModalHeader>
+        <CModalBody className="clearfix">
+          <CForm>
+            <div className="mb-3">
+              <CFormLabel htmlFor="forname">Amount</CFormLabel>
+              <CFormInput
+                type="text"
+                id="forname"
+                placeholder="Enter Amount"
+                required
+                onChange={(e) => handleInputChange("amount", e.target.value)}
+              />
+              <CFormFeedback className='text-danger'>{paymentValues.amount.error}</CFormFeedback>
+            </div>
+            <div className="mb-3">
+              <CFormLabel htmlFor="forname">Remark</CFormLabel>
+              <CFormInput
+                type="text"
+                id="forname"
+                placeholder="Enter Remark"
+                required
+                onChange={(e) => handleInputChange("remark", e.target.value)}
+              />
+              <CFormFeedback className='text-danger'>{paymentValues.remark.error}</CFormFeedback>
+            </div>
+          </CForm>
+
+        </CModalBody>
+        <CModalFooter>
+          <CButton className='btn btn btn-primary' disabled={paymentValues.amount.value == "" || paymentValues.amount.error != ""} onClick={handleFormSubmit}>
+            Submit
+          </CButton>
+          <CButton color="secondary" onClick={closeModal}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
     </>
   )
 }

@@ -3,6 +3,7 @@ import React from 'react'
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Users = React.lazy(() => import('./views/tables/users/Users'))
 const Challenges = React.lazy(() => import('./views/tables/challenges/Challenges'))
+const ReviewChallenges = React.lazy(() => import('./views/tables/reviewChallenges/ReviewChallenges'))
 const Payments = React.lazy(() => import('./views/tables/payments/Payments'))
 const Payment = React.lazy(() => import('./views/tables/payment/Payment'))
 const Deposits = React.lazy(() => import('./views/tables/deposits/Deposits'))
@@ -41,6 +42,7 @@ const routes = [
   { path: '/adduser', name: 'Adduser', element: Adduser },
   { path: '/users', name: 'Users', element: Users },
   { path: '/challenges', name: 'Challenges', element: Challenges },
+  { path: '/reviewchallenges', name: 'reviewChallenges', element: ReviewChallenges },
   { path: '/deposits', name: 'Deposits', element: Deposits },
   { path: '/payments', name: 'Payments', element: Payments },
   { path: '/withdraws', name: 'Withdraws', element: Withdraws },

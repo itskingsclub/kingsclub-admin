@@ -120,42 +120,42 @@ const Payments = () => {
       {
         accessorKey: 'id', //access nested data with dot notation
 
-        header: 'id',
+        header: 'Id',
 
         size: 50,
       },
       {
-        accessorKey: 'user_id', //access nested data with dot notation
+        accessorKey: 'user_mobile', //access nested data with dot notation
 
-        header: 'user_id',
+        header: 'User',
 
         size: 30,
       },
       {
         accessorKey: 'amount', //access nested data with dot notation
 
-        header: 'amount',
+        header: 'Amount',
 
         size: 100,
       },
       {
         accessorKey: 'payment_mode', //access nested data with dot notation
 
-        header: 'payment_mode',
+        header: 'Payment Mode',
 
         size: 150,
       },
       {
         accessorKey: 'updatedAt', //access nested data with dot notation
 
-        header: 'updatedAt',
+        header: 'Updated At',
 
         size: 150,
       },
       {
         accessorKey: 'image', //access nested data with dot notation
 
-        header: 'image',
+        header: 'Image',
 
         size: 150,
       },
@@ -163,14 +163,14 @@ const Payments = () => {
       {
         accessorKey: 'payment_status',
 
-        header: 'payment_status',
+        header: 'Payment Status',
 
         size: 200,
       },
       {
         accessorKey: 'action',
 
-        header: 'action',
+        header: 'Action',
 
         size: 200,
       },
@@ -188,7 +188,8 @@ const Payments = () => {
     return payments.filter(payment => payment.type === "Deposit").map((payment) => ({
       id: payment.id,
       type: payment.type,
-      user_id: payment.user_id,
+      user_mobile: payment.user?.mobile,
+      userId: payment.user?.id,
       amount: payment.amount,
       payment_mode: payment.payment_mode,
       updatedAt: formatDate(payment.updatedAt),
@@ -199,7 +200,7 @@ const Payments = () => {
   const columns = useMemo(
     () =>
       paymentTable.map((item) => {
-        if (item.header === 'image') {
+        if (item.header === 'Image') {
           return {
             ...item,
             Cell: ({ row }) => (
@@ -225,7 +226,7 @@ const Payments = () => {
             ),
           };
         }
-        if (item.header === 'action') {
+        if (item.header === 'Action') {
           return {
             ...item,
             Cell: ({ row }) => (
@@ -245,6 +246,18 @@ const Payments = () => {
                   View
                 </button>
               </>
+            ),
+          }
+        }
+        if (item.accessorKey === 'user_mobile') {
+          return {
+            ...item,
+            Cell: ({ row }) => (
+              <a className='link'
+                onClick={() => navigate(`/user/${row?.original?.userId}/profile`)}
+              >
+                {row?.original?.user_mobile}
+              </a>
             ),
           }
         }
