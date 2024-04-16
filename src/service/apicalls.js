@@ -98,6 +98,16 @@ export async function getChallange(payload) {
   }
 }
 
+export async function getReviewChallange(payload) {
+  try {
+    const queryString = new URLSearchParams(payload).toString()
+    const response = await APIKit.get(`/challenge/all-review?${queryString}`)
+    return response.data
+  } catch (error) {
+    return error
+  }
+}
+
 export async function updateChallange(payload) {
   try {
     const response = await APIKit.put(`/challenge/update`, payload)
@@ -204,6 +214,15 @@ export async function withdrawal(payload) {
 export async function updateWithdraw(payload) {
   try {
     const response = await APIKit.put(`/payment/update-withdraw`, payload)
+    return response.data
+  } catch (error) {
+    return error
+  }
+}
+
+export async function deductCoin(payload) {
+  try {
+    const response = await APIKit.put(`/payment/deduct-coin`, payload)
     return response.data
   } catch (error) {
     return error

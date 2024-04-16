@@ -2,9 +2,9 @@ import React, { useState, useMemo, useEffect, useContext } from 'react'
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import { getAllUsers, getPayments, getWithdraw, updateWithdraw } from 'src/service/apicalls'
 import { CButton, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CImage, CFormSelect, CForm, CFormLabel, CFormInput, CFormFeedback } from '@coreui/react'
-import baseAddress from 'src/service/baseAddress'
 import { useNavigate } from 'react-router-dom'
 import { UserContext } from 'src/userDetail/Userdetail'
+
 const data = [
   {
     id: '2',
@@ -20,7 +20,6 @@ const data = [
 ]
 
 const Withdraws = () => {
-  //should be memoized or stable
   const { userDetail } = useContext(UserContext)
   const navigate = useNavigate()
   const [payments, setPayments] = useState([])
@@ -71,7 +70,6 @@ const Withdraws = () => {
     }));
   };
   const handleFormSubmit = () => {
-
     const data = {
       admin_id: userDetail.id,
       id: challengedata.id,
@@ -81,7 +79,6 @@ const Withdraws = () => {
       remark: paymentValues.remark.value,
       updated_by: userDetail.id,
     }
-    console.log("data", data)
     updateWithdraw(data).then((res) => {
       console.log("res.data", res?.message)
       closeModal()
@@ -112,19 +109,19 @@ const Withdraws = () => {
       {
         accessorKey: 'id', //access nested data with dot notation
 
-        header: 'id',
+        header: 'Id',
 
         size: 50,
       },
       {
-        accessorKey: 'user_id', //access nested data with dot notation
+        accessorKey: 'user_mobile', //access nested data with dot notation
 
-        header: 'user_id',
+        header: 'User',
 
         size: 30,
       },
       {
-        accessorKey: 'amount', //access nested data with dot notation
+        accessorKey: 'Amount', //access nested data with dot notation
 
         header: 'amount',
 
@@ -133,14 +130,14 @@ const Withdraws = () => {
       {
         accessorKey: 'payment_mode', //access nested data with dot notation
 
-        header: 'payment_mode',
+        header: 'Payment Mode',
 
         size: 150,
       },
       {
         accessorKey: 'updatedAt', //access nested data with dot notation
 
-        header: 'updatedAt',
+        header: 'Updated At',
 
         size: 150,
       },
@@ -148,14 +145,14 @@ const Withdraws = () => {
       {
         accessorKey: 'payment_status',
 
-        header: 'payment_status',
+        header: 'Payment Status',
 
         size: 200,
       },
       {
         accessorKey: 'action',
 
-        header: 'action',
+        header: 'Action',
 
         size: 200,
       },
@@ -173,7 +170,8 @@ const Withdraws = () => {
     return payments.filter(payment => payment.type === "Withdraw").map((payment) => ({
       id: payment.id,
       type: payment.type,
-      user_id: payment.user_id,
+      user_mobile: payment.user?.mobile,
+      userId: payment.user?.id,
       amount: payment.amount,
       payment_mode: payment.payment_mode,
       updatedAt: formatDate(payment.updatedAt),
@@ -194,6 +192,18 @@ const Withdraws = () => {
               >
                 Action
               </button>
+            ),
+          }
+        }
+        if (item.accessorKey === 'user_mobile') {
+          return {
+            ...item,
+            Cell: ({ row }) => (
+              <a className='link'
+                onClick={() => navigate(`/user/${row?.original?.userId}/profile`)}
+              >
+                {row?.original?.user_mobile}
+              </a>
             ),
           }
         }

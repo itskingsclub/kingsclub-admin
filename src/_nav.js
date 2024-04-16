@@ -41,7 +41,13 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Challenges',
+    name: 'reviewChallenges',
+    to: '/reviewchallenges',
+    icon: <CIcon icon={cibGenius} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'All Challenges',
     to: '/challenges',
     icon: <CIcon icon={cibGenius} customClassName="nav-icon" />,
   },
