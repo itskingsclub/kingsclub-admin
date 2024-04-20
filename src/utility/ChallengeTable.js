@@ -15,7 +15,7 @@ const ChallengeTable = ({ apiEndpoint }) => {
     const [rowCount, setRowCount] = useState(10)
     const [columnFilters, setColumnFilters] = useState([])
     const [globalFilter, setGlobalFilter] = useState('')
-    const [sorting, setSorting] = useState([{ desc: false, id: 'challenge_status' }])
+    const [sorting, setSorting] = useState([{ desc: false, id: apiEndpoint === 'challenge' ? 'id' : 'challenge_status' }])
     const [pagination, setPagination] = useState({
         pageIndex: 0,
         pageSize: 10,
@@ -68,11 +68,11 @@ const ChallengeTable = ({ apiEndpoint }) => {
             updated_by: userDetail.id,
         }
         console.log("data", data)
-        // clearChallenge(data).then((res) => {
-        //   console.log("res.data", res.data)
-        //   closeModal()
-        //   fechData()
-        // })
+        clearChallenge(data).then((res) => {
+            console.log("res.data", res.data)
+            closeModal()
+            fechData()
+        })
     };
     const fechData = async () => {
         const data = {

@@ -140,9 +140,9 @@ const Users = () => {
       },
 
       {
-        accessorKey: 'game_coin', //normal accessorKey
+        accessorKey: 'total_coin', //normal accessorKey
 
-        header: 'Game Coin',
+        header: 'Total Coin',
 
         size: 200,
       },
@@ -214,6 +214,20 @@ const Users = () => {
                     {(row?.original?.name).split('')[0].toUpperCase()}
                   </div>
                 )}
+              </>
+            ),
+          }
+        }
+        if (item.header === 'Total Coin') {
+          return {
+            ...item,
+            Cell: ({ row }) => (
+              <>
+                <span>
+                  {row?.original?.game_coin +
+                    (row?.original?.win_coin != null ? row?.original?.win_coin : 0) +
+                    (row?.original?.refer_coin != null ? row?.original?.refer_coin : 0)}
+                </span>
               </>
             ),
           }

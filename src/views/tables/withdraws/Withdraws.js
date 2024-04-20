@@ -73,7 +73,7 @@ const Withdraws = () => {
     const data = {
       admin_id: userDetail.id,
       id: challengedata.id,
-      user_id: challengedata.user_id,
+      user_id: challengedata.userId,
       amount: paymentValues.amount.value,
       payment_status: paymentValues.payment_status.value,
       remark: paymentValues.remark.value,
@@ -181,7 +181,7 @@ const Withdraws = () => {
   const columns = useMemo(
     () =>
       paymentTable.map((item) => {
-        if (item.header === 'action') {
+        if (item.header === 'Action') {
           return {
             ...item,
             Cell: ({ row }) => (

@@ -49,7 +49,7 @@ const Deposits = () => {
   };
   const openActionModal = (data) => {
     setActionModal(true);
-    console.log("data", data)
+    console.log("challengetData", data)
     setChallengedata(data)
   };
 
@@ -83,13 +83,13 @@ const Deposits = () => {
     const data = {
       admin_id: userDetail.id,
       id: challengedata.id,
-      user_id: challengedata.user_id,
+      user_id: challengedata.userId,
       amount: Number(paymentValues.amount.value),
       payment_status: paymentValues.payment_status.value,
       remark: paymentValues.remark.value,
       updated_by: userDetail.id,
     }
-    console.log("paymentValues", paymentValues)
+    console.log("data", data)
     updateDeposit(data).then((res) => {
       console.log("res.data", res.data)
       closeModal()
