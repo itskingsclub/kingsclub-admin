@@ -38,15 +38,24 @@ const Withdraws = () => {
   });
   const [challengedata, setChallengedata] = useState({})
   const [actionModal, setActionModal] = useState(false);
+  const [formModal, setFormModal] = useState(false);
+  const [formdata, setFormdata] = useState({})
+
 
 
   const openActionModal = (data) => {
     setActionModal(true);
     setChallengedata(data)
   };
+  const openFormModal = (data) => {
+    setFormModal(true);
+    console.log("data", data)
+    setFormdata(data)
+  };
 
   const closeModal = () => {
     setActionModal(false);
+    setFormModal(false);
   };
   const handleInputChange = (fieldName, value) => {
     const regexPattern = {
@@ -121,12 +130,47 @@ const Withdraws = () => {
         size: 30,
       },
       {
-        accessorKey: 'Amount', //access nested data with dot notation
+        accessorKey: 'amount', //access nested data with dot notation
 
-        header: 'amount',
+        header: 'Amount',
 
         size: 100,
       },
+      // {
+      //   accessorKey: 'upi_id', //access nested data with dot notation
+
+      //   header: 'Upi Id',
+
+      //   size: 100,
+      // },
+      // {
+      //   accessorKey: 'account_number', //access nested data with dot notation
+
+      //   header: 'Acount Number',
+
+      //   size: 100,
+      // },
+      // {
+      //   accessorKey: 'ifsc_code', //access nested data with dot notation
+
+      //   header: 'IFSC Code',
+
+      //   size: 100,
+      // },
+      // {
+      //   accessorKey: 'bank_name', //access nested data with dot notation
+
+      //   header: 'Bank Name',
+
+      //   size: 100,
+      // },
+      // {
+      //   accessorKey: 'account_holder_name', //access nested data with dot notation
+
+      //   header: 'Account Holder Name',
+
+      //   size: 100,
+      // },
       {
         accessorKey: 'payment_mode', //access nested data with dot notation
 
@@ -171,6 +215,11 @@ const Withdraws = () => {
       id: payment.id,
       type: payment.type,
       user_mobile: payment.user?.mobile,
+      upi_id: payment.user?.upi_id,
+      account_number: payment.user?.account_number,
+      ifsc_code: payment.user?.ifsc_code,
+      bank_name: payment.user?.bank_name,
+      account_holder_name: payment.user?.account_holder_name,
       userId: payment.user?.id,
       amount: payment.amount,
       payment_mode: payment.payment_mode,
@@ -185,13 +234,22 @@ const Withdraws = () => {
           return {
             ...item,
             Cell: ({ row }) => (
-              <button
-                type="button"
-                className="btn btn btn-primary"
-                onClick={() => openActionModal(row?.original)}
-              >
-                Action
-              </button>
+              <>
+                <button
+                  type="button"
+                  className="btn btn btn-primary me-3"
+                  onClick={() => openActionModal(row?.original)}
+                >
+                  Action
+                </button>
+                <button
+                  type="button"
+                  className="btn btn btn-primary"
+                  onClick={() => openFormModal(row?.original)}
+                >
+                  Form
+                </button>
+              </>
             ),
           }
         }
@@ -292,6 +350,45 @@ const Withdraws = () => {
           <CButton className='btn btn btn-primary' disabled={paymentValues.amount.value == "" || paymentValues.amount.error != "" || paymentValues.payment_status.value == '' || paymentValues.payment_status.error != ""} onClick={handleFormSubmit}>
             Submit
           </CButton>
+          <CButton color="secondary" onClick={closeModal}>
+            Close
+          </CButton>
+        </CModalFooter>
+      </CModal>
+      <CModal
+        visible={formModal}
+        aria-labelledby="LiveDemoExampleLabel"
+      >
+        <CModalHeader onClick={closeModal}>
+          <CModalTitle id="LiveDemoExampleLabel">Form Details</CModalTitle>
+        </CModalHeader>
+        <CModalBody className="clearfix p-0">
+          <div className="user-info">
+            <div className="user-info-left">
+              <div className="info-item">
+                <span className="info-label">Upi Id</span>
+                <span className="info-value">{formdata.upi_id}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Account Number:</span>
+                <span className="info-value">{formdata.account_number}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Bank Name:</span>
+                <span className="info-value">{formdata.bank_name}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">IFSC Code:</span>
+                <span className="info-value">{formdata.ifsc_code}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Account Holder Name:</span>
+                <span className="info-value">{formdata.account_holder_name}</span>
+              </div>
+            </div>
+          </div>
+        </CModalBody>
+        <CModalFooter>
           <CButton color="secondary" onClick={closeModal}>
             Close
           </CButton>
