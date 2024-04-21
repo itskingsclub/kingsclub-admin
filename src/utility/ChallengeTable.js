@@ -85,8 +85,10 @@ const ChallengeTable = ({ apiEndpoint }) => {
             let res;
             if (apiEndpoint === 'challenge') {
                 res = await getChallange(data);
+                setRowCount(res?.data?.totalCount)
             } else if (apiEndpoint === 'reviewChallenge') {
                 res = await getReviewChallange(data);
+                setRowCount(res?.data?.totalCount)
             }
             setChallenges(res.data.challenges);
             console.log(res)
@@ -203,7 +205,7 @@ const ChallengeTable = ({ apiEndpoint }) => {
                         ...item,
                         Cell: ({ row }) => (
                             <>
-                                {row?.original[item.accessorKey] !== undefined ? (
+                                {row?.original[item.accessorKey] ? (
                                     <img
                                         src={`${baseAddress}/upload/${row?.original[item.accessorKey]}`}
                                         alt="No Image"
@@ -273,7 +275,7 @@ const ChallengeTable = ({ apiEndpoint }) => {
                 columns={columns}
                 data={formattedData}
                 getRowId={(row) => row.id}
-                initialState={{ showColumnFilters: false, density: 'compact' }}
+                initialState={{ showColumnFilters: false, density: 'comfortable' }}
                 manualFiltering
                 manualPagination
                 onColumnFiltersChange={setColumnFilters}

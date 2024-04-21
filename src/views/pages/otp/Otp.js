@@ -55,7 +55,7 @@ const Otp = () => {
       <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
         <CContainer>
           <CRow className="justify-content-center">
-            <CCol md={4}>
+            <CCol md={6} sm={8} lg={5} xl={4}>
               <CCardGroup>
                 <CCard className="p-4">
                   <CCardBody>
@@ -74,7 +74,7 @@ const Otp = () => {
                         />
                       </CInputGroup>
                       <CRow>
-                        <CCol xs={6}>
+                        <CCol xs={12}>
                           <CButton color="primary" className="px-4" onClick={submitUser}>
                             Send Otp
                           </CButton>
