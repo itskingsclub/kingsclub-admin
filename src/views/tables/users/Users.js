@@ -85,6 +85,7 @@ const Users = () => {
       limit: pagination?.pageSize,
       sort: sorting.length > 0 ? sorting[0]?.id : "",
       order: sorting.length > 0 ? sorting[0].desc ? 'ASC' : 'DESC' : 'ASC',
+      ...(/^\d+$/.test(globalFilter) ? { mobile: globalFilter } : { name: globalFilter })
     }
     getAllUsers(data).then((res) => {
       setUsers(res.data.users)
@@ -98,7 +99,7 @@ const Users = () => {
 
   useEffect(() => {
     fechData()
-  }, [pagination, sorting])
+  }, [pagination, sorting, globalFilter])
 
   const userTable = useMemo(
     () => [
@@ -280,6 +281,7 @@ const Users = () => {
         rowCount={rowCount}
         enableStickyHeader
         enableStickyFooter
+        enableGlobalFilter
         state={{
           columnFilters,
           globalFilter,
@@ -288,7 +290,7 @@ const Users = () => {
           enableStickyHeader: true,
         }}
         muiSearchTextFieldProps={{
-          placeholder: `Search Number`,
+          placeholder: `Search Number & Name`,
         }}
       />
       <CModal
